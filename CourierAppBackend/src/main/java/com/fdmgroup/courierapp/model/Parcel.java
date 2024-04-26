@@ -19,14 +19,14 @@ public class Parcel {
 	private String description;
 	
 	@OneToOne
-	private Order order;
+	private OrderItem orderItem;
 	
-	public Parcel(long parcelId, Size size, String description, Order order) {
+	public Parcel(long parcelId, Size size, String description, OrderItem orderItem) {
 		super();
 		this.parcelId = parcelId;
 		this.size = size;
 		this.description = description;
-		this.order = order;
+		this.orderItem = orderItem;
 	}
 
 	public long getParcelId() {
@@ -53,12 +53,12 @@ public class Parcel {
 		this.description = description;
 	}
 
-	public Order getOrder() {
-		return order;
+	public OrderItem getOrderItem() {
+		return orderItem;
 	}
 
-	public void setOrder(Order order) {
-		this.order = order;
+	public void setOrderItem(OrderItem orderItem) {
+		this.orderItem = orderItem;
 	}
 }
 
