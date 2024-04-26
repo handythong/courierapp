@@ -10,25 +10,26 @@ import jakarta.persistence.OneToOne;
 import jakarta.persistence.SequenceGenerator;
 
 @Entity
-public class Order {
+public class OrderItem {
 	
 	@Id
-	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "orderId_IdSeq")
-	@SequenceGenerator(name = "orderId_IdSeq", sequenceName = "orderId_IdSeq", allocationSize = 1, initialValue = 1)
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "orderItemId_IdSeq")
+	@SequenceGenerator(name = "orderItemId_IdSeq", sequenceName = "orderItemId_IdSeq", allocationSize = 1, initialValue = 1)
 	private long orderId;
 	
 	private Status status;
 	
 	@ManyToOne
-	@JoinColumn(name = "FK_courier")
+	@JoinColumn(name = "FK_Courier_Id")
 	private Courier courier;
 	@OneToOne
+	@JoinColumn(name = "FK_Parcel_Id")
 	private Parcel parcel;
 	
 //	private long recipientId;
 //	private long senderId;
 	
-	public Order(long orderId, Status status, Courier courier, Parcel parcel) {
+	public OrderItem(long orderId, Status status, Courier courier, Parcel parcel) {
 		super();
 		this.orderId = orderId;
 		this.status = status;

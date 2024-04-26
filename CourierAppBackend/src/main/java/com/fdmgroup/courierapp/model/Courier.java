@@ -21,13 +21,13 @@ public class Courier {
 	private VehicleType vehicle;
 	
 	@OneToMany(mappedBy = "courier")
-	private List<Order> order = new ArrayList<Order>();
+	private List<OrderItem> orderItemList = new ArrayList<OrderItem>();
 
-	public Courier(long courierId, VehicleType vehicle, List<Order> order) {
+	public Courier(long courierId, VehicleType vehicle, List<OrderItem> orderItemList) {
 		super();
 		this.courierId = courierId;
 		this.vehicle = vehicle;
-		this.order = order;
+		this.orderItemList = orderItemList;
 	}
 
 	public long getCourierId() {
@@ -46,12 +46,12 @@ public class Courier {
 		this.vehicle = vehicle;
 	}
 
-	public List<Order> getOrder() {
-		return order;
+	public List<OrderItem> getOrderItemList() {
+		return orderItemList;
 	}
 
-	public void setOrder(List<Order> order) {
-		this.order = order;
+	public void setOrderItemList(List<OrderItem> orderItemList) {
+		this.orderItemList = orderItemList;
 	}
 }
 
