@@ -16,7 +16,6 @@ public class OrderItem {
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "orderItemId_IdSeq")
 	@SequenceGenerator(name = "orderItemId_IdSeq", sequenceName = "orderItemId_IdSeq", allocationSize = 1, initialValue = 1)
 	private long orderId;
-	
 	private Status status;
 	
 	@ManyToOne
@@ -25,16 +24,21 @@ public class OrderItem {
 	@OneToOne
 	@JoinColumn(name = "FK_Parcel_Id")
 	private Parcel parcel;
-	
-//	private long recipientId;
-//	private long senderId;
-	
-	public OrderItem(long orderId, Status status, Courier courier, Parcel parcel) {
+	@ManyToOne
+	@JoinColumn(name = "FK_sender_Id")
+	private User sender;
+	@ManyToOne
+	@JoinColumn(name = "FK_recipient_Id")
+	private User recipient;
+
+	public OrderItem(long orderId, Status status, Courier courier, Parcel parcel, User sender, User recipient) {
 		super();
 		this.orderId = orderId;
 		this.status = status;
 		this.courier = courier;
 		this.parcel = parcel;
+		this.sender = sender;
+		this.recipient = recipient;
 	}
 
 	public long getOrderId() {
@@ -67,6 +71,22 @@ public class OrderItem {
 
 	public void setParcel(Parcel parcel) {
 		this.parcel = parcel;
+	}
+
+	public User getSender() {
+		return sender;
+	}
+
+	public void setSender(User sender) {
+		this.sender = sender;
+	}
+
+	public User getRecipient() {
+		return recipient;
+	}
+
+	public void setRecipient(User recipient) {
+		this.recipient = recipient;
 	}
 }
 
