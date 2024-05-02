@@ -14,9 +14,9 @@ import jakarta.persistence.OneToOne;
 @Entity
 public class Courier {
 	
-    @Id
-    @Column(name = "PK_FK_account_Id")
-    private Long accountId;
+	@Id
+	@Column(name = "PK_FK_account_Id")
+	private Long accountId;
 
 	@OneToOne
 	@JoinColumn(name = "PK_FK_account_Id")

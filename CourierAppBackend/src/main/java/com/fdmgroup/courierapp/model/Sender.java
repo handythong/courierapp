@@ -13,21 +13,21 @@ import jakarta.persistence.OneToOne;
 
 @Entity
 public class Sender {
-	
-    @Id
-    @Column(name = "PK_FK_account_Id")
-    private Long accountId;
+
+	@Id
+	@Column(name = "PK_FK_account_Id")
+	private Long accountId;
 
 	@OneToOne
 	@JoinColumn(name = "PK_FK_account_Id")
 	private Account account;
-	
+
 	private String fullName;
 	private String email;
 	private String phoneNo;
 	private Date lastUpdated;
-	
-	@OneToMany(mappedBy="sender")
+
+	@OneToMany(mappedBy = "sender")
 	private List<OrderItem> orderItemList = new ArrayList<OrderItem>();
 
 	public Sender(Account account, String fullName, String email, String phoneNo, Date lastUpdated,
@@ -88,6 +88,5 @@ public class Sender {
 	public void setOrderItemList(List<OrderItem> orderItemList) {
 		this.orderItemList = orderItemList;
 	}
-	
-	
+
 }

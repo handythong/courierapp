@@ -13,7 +13,7 @@ import jakarta.persistence.SequenceGenerator;
 
 @Entity
 public class OrderItem {
-	
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "orderItemId_IdSeq")
 	@SequenceGenerator(name = "orderItemId_IdSeq", sequenceName = "orderItemId_IdSeq", allocationSize = 1, initialValue = 1)
@@ -28,7 +28,7 @@ public class OrderItem {
 	private Date orderDate;
 	private Date lastUpdated;
 	private Date createdOn;
-	
+
 	@ManyToOne
 	@JoinColumn(name = "FK_Courier_Id")
 	private Courier courier;
@@ -38,7 +38,7 @@ public class OrderItem {
 	@ManyToOne
 	@JoinColumn(name = "FK_sender_Id")
 	private Sender sender;
-	
+
 	public OrderItem(long orderId, Status status, String recipientFullName, String recipientEmail,
 			String recipientPhoneNo, String deliveryAddress, String pickupAddress, Date deliveryDate, Date orderDate,
 			Date lastUpdated, Date createdOn, Courier courier, Parcel parcel, Sender sender) {
@@ -170,15 +170,9 @@ public class OrderItem {
 	public void setSender(Sender sender) {
 		this.sender = sender;
 	}
-	
-	
+
 }
 
 enum Status {
-	PROCESSING,
-	READYFORPICKUP,
-	ENROUTE,
-	DELIVERED,
-	FAILED,
-	RETURNED
+	PROCESSING, READYFORPICKUP, ENROUTE, DELIVERED, FAILED, RETURNED
 }
