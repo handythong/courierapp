@@ -1,9 +1,13 @@
 package com.fdmgroup.courierapp.model;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.SequenceGenerator;
 
 @Entity
@@ -19,13 +23,22 @@ public class User {
 	private String phone;
 	private String address;
 	
-	public User(long userId, String name, String email, String phone, String address) {
+	@OneToMany(mappedBy="sender")
+	private List<OrderItem> sendingOrderList = new ArrayList<OrderItem>();
+	
+	@OneToMany(mappedBy="recipient")
+	private List<OrderItem> receiveOrderList = new ArrayList<OrderItem>();
+
+	public User(long userId, String name, String email, String phone, String address, List<OrderItem> sendingOrderList,
+			List<OrderItem> receiveOrderList) {
 		super();
 		this.userId = userId;
 		this.name = name;
 		this.email = email;
 		this.phone = phone;
 		this.address = address;
+		this.sendingOrderList = sendingOrderList;
+		this.receiveOrderList = receiveOrderList;
 	}
 
 	public long getUserId() {
@@ -66,5 +79,21 @@ public class User {
 
 	public void setAddress(String address) {
 		this.address = address;
+	}
+
+	public List<OrderItem> getSendingOrderList() {
+		return sendingOrderList;
+	}
+
+	public void setSendingOrderList(List<OrderItem> sendingOrderList) {
+		this.sendingOrderList = sendingOrderList;
+	}
+
+	public List<OrderItem> getReceiveOrderList() {
+		return receiveOrderList;
+	}
+
+	public void setReceiveOrderList(List<OrderItem> receiveOrderList) {
+		this.receiveOrderList = receiveOrderList;
 	}
 }
