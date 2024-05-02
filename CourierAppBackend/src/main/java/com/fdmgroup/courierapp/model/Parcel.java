@@ -9,22 +9,22 @@ import jakarta.persistence.SequenceGenerator;
 
 @Entity
 public class Parcel {
-	
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "parcelId_IdSeq")
 	@SequenceGenerator(name = "parcelId_IdSeq", sequenceName = "parcelId_IdSeq", allocationSize = 1, initialValue = 1)
 	private long parcelId;
-	
-	private Size size;
+
+	private int weight;
 	private String description;
-	
+
 	@OneToOne
 	private OrderItem orderItem;
-	
-	public Parcel(long parcelId, Size size, String description, OrderItem orderItem) {
+
+	public Parcel(long parcelId, int weight, String description, OrderItem orderItem) {
 		super();
 		this.parcelId = parcelId;
-		this.size = size;
+		this.weight = weight;
 		this.description = description;
 		this.orderItem = orderItem;
 	}
@@ -32,23 +32,23 @@ public class Parcel {
 	public long getParcelId() {
 		return parcelId;
 	}
-	
+
 	public void setParcelId(long parcelId) {
 		this.parcelId = parcelId;
 	}
-	
-	public Size getSize() {
-		return size;
+
+	public int getWeight() {
+		return weight;
 	}
-	
-	public void setSize(Size size) {
-		this.size = size;
+
+	public void setWeight(int weight) {
+		this.weight = weight;
 	}
-	
+
 	public String getDescription() {
 		return description;
 	}
-	
+
 	public void setDescription(String description) {
 		this.description = description;
 	}
@@ -60,10 +60,4 @@ public class Parcel {
 	public void setOrderItem(OrderItem orderItem) {
 		this.orderItem = orderItem;
 	}
-}
-
-enum Size {
-	SMALL,
-	MEDIUM,
-	LARGE
 }

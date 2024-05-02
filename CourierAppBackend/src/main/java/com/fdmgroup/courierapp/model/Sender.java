@@ -12,8 +12,8 @@ import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 
 @Entity
-public class Courier {
-	
+public class Sender {
+
 	@Id
 	@Column(name = "PK_FK_account_Id")
 	private Long accountId;
@@ -21,20 +21,22 @@ public class Courier {
 	@OneToOne
 	@JoinColumn(name = "PK_FK_account_Id")
 	private Account account;
-	
+
 	private String fullName;
-	private int vehicleCapacity;
+	private String email;
+	private String phoneNo;
 	private Date lastUpdated;
-	
-	@OneToMany(mappedBy = "courier")
+
+	@OneToMany(mappedBy = "sender")
 	private List<OrderItem> orderItemList = new ArrayList<OrderItem>();
 
-	public Courier(Account account, String fullName, int vehicleCapacity, Date lastUpdated,
+	public Sender(Account account, String fullName, String email, String phoneNo, Date lastUpdated,
 			List<OrderItem> orderItemList) {
 		super();
 		this.account = account;
 		this.fullName = fullName;
-		this.vehicleCapacity = vehicleCapacity;
+		this.email = email;
+		this.phoneNo = phoneNo;
 		this.lastUpdated = lastUpdated;
 		this.orderItemList = orderItemList;
 	}
@@ -55,12 +57,20 @@ public class Courier {
 		this.fullName = fullName;
 	}
 
-	public int getVehicleCapacity() {
-		return vehicleCapacity;
+	public String getEmail() {
+		return email;
 	}
 
-	public void setVehicleCapacity(int vehicleCapacity) {
-		this.vehicleCapacity = vehicleCapacity;
+	public void setEmail(String email) {
+		this.email = email;
+	}
+
+	public String getPhoneNo() {
+		return phoneNo;
+	}
+
+	public void setPhoneNo(String phoneNo) {
+		this.phoneNo = phoneNo;
 	}
 
 	public Date getLastUpdated() {
@@ -78,6 +88,5 @@ public class Courier {
 	public void setOrderItemList(List<OrderItem> orderItemList) {
 		this.orderItemList = orderItemList;
 	}
-	
-	
+
 }
