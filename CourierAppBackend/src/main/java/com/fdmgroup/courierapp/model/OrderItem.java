@@ -39,9 +39,12 @@ public class OrderItem {
 	@JoinColumn(name = "FK_sender_Id")
 	private Sender sender;
 
+	public OrderItem() {
+	}
+
 	public OrderItem(long orderId, Status status, String recipientFullName, String recipientEmail,
-			String recipientPhoneNo, String deliveryAddress, String pickupAddress, Date deliveryDate, Date orderDate,
-			Date lastUpdated, Date createdOn, Courier courier, Parcel parcel, Sender sender) {
+					 String recipientPhoneNo, String deliveryAddress, String pickupAddress, Date deliveryDate, Date orderDate,
+					 Date lastUpdated, Date createdOn, Courier courier, Parcel parcel, Sender sender) {
 		super();
 		this.orderId = orderId;
 		this.status = status;
