@@ -17,10 +17,6 @@ public class Courier {
 	@Id
 	@Column(name = "PK_FK_account_Id")
 	private Long accountId;
-
-	@OneToOne
-	@JoinColumn(name = "PK_FK_account_Id")
-	private Account account;
 	
 	private String fullName;
 	private int vehicleCapacity;
@@ -32,22 +28,20 @@ public class Courier {
 	public Courier() {
 	}
 
-	public Courier(Account account, String fullName, int vehicleCapacity, Date lastUpdated,
-				   List<OrderItem> orderItemList) {
-		super();
-		this.account = account;
+	public Courier(Long accountId, String fullName, int vehicleCapacity, Date lastUpdated, List<OrderItem> orderItemList) {
+		this.accountId = accountId;
 		this.fullName = fullName;
 		this.vehicleCapacity = vehicleCapacity;
 		this.lastUpdated = lastUpdated;
 		this.orderItemList = orderItemList;
 	}
 
-	public Account getAccount() {
-		return account;
+	public Long getAccountId() {
+		return accountId;
 	}
 
-	public void setAccount(Account account) {
-		this.account = account;
+	public void setAccountId(Long accountId) {
+		this.accountId = accountId;
 	}
 
 	public String getFullName() {
@@ -81,6 +75,4 @@ public class Courier {
 	public void setOrderItemList(List<OrderItem> orderItemList) {
 		this.orderItemList = orderItemList;
 	}
-	
-	
 }
