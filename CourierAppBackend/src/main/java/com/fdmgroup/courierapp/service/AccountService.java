@@ -29,7 +29,7 @@ public class AccountService {
 	private final Logger logger = LogManager.getLogger();
 	
 	public Account registerAccount(Account newAccount) throws Exception {
-		if (accountRepo.findByUsername(newAccount.getUsername()) != null ) {
+		if (accountRepo.findByUsername(newAccount.getUsername()).isPresent()) {
 			logger.error("User tried to create with existing username");
 			throw new DuplicateAccountException("Username Taken");
 		}

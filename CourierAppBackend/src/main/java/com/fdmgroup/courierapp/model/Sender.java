@@ -18,10 +18,6 @@ public class Sender {
 	@Column(name = "PK_FK_account_Id")
 	private Long accountId;
 
-	@OneToOne
-	@JoinColumn(name = "PK_FK_account_Id")
-	private Account account;
-
 	private String fullName;
 	private String email;
 	private String phoneNo;
@@ -33,10 +29,8 @@ public class Sender {
 	public Sender() {
 	}
 
-	public Sender(Account account, String fullName, String email, String phoneNo, Date lastUpdated,
-				  List<OrderItem> orderItemList) {
-		super();
-		this.account = account;
+	public Sender(Long accountId, String fullName, String email, String phoneNo, Date lastUpdated, List<OrderItem> orderItemList) {
+		this.accountId = accountId;
 		this.fullName = fullName;
 		this.email = email;
 		this.phoneNo = phoneNo;
@@ -44,12 +38,12 @@ public class Sender {
 		this.orderItemList = orderItemList;
 	}
 
-	public Account getAccount() {
-		return account;
+	public Long getAccountId() {
+		return accountId;
 	}
 
-	public void setAccount(Account account) {
-		this.account = account;
+	public void setAccountId(Long accountId) {
+		this.accountId = accountId;
 	}
 
 	public String getFullName() {
@@ -91,5 +85,4 @@ public class Sender {
 	public void setOrderItemList(List<OrderItem> orderItemList) {
 		this.orderItemList = orderItemList;
 	}
-
 }
