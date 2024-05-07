@@ -29,8 +29,11 @@ public class Courier {
 	@OneToMany(mappedBy = "courier")
 	private List<OrderItem> orderItemList = new ArrayList<OrderItem>();
 
+	public Courier() {
+	}
+
 	public Courier(Account account, String fullName, int vehicleCapacity, Date lastUpdated,
-			List<OrderItem> orderItemList) {
+				   List<OrderItem> orderItemList) {
 		super();
 		this.account = account;
 		this.fullName = fullName;

@@ -21,6 +21,9 @@ public class Parcel {
 	@OneToOne
 	private OrderItem orderItem;
 
+	public Parcel() {
+	}
+
 	public Parcel(long parcelId, int weight, String description, OrderItem orderItem) {
 		super();
 		this.parcelId = parcelId;

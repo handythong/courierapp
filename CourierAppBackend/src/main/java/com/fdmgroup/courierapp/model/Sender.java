@@ -30,8 +30,11 @@ public class Sender {
 	@OneToMany(mappedBy = "sender")
 	private List<OrderItem> orderItemList = new ArrayList<OrderItem>();
 
+	public Sender() {
+	}
+
 	public Sender(Account account, String fullName, String email, String phoneNo, Date lastUpdated,
-			List<OrderItem> orderItemList) {
+				  List<OrderItem> orderItemList) {
 		super();
 		this.account = account;
 		this.fullName = fullName;
