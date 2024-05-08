@@ -1,9 +1,6 @@
 package com.fdmgroup.courierapp.controller;
-
 import com.fdmgroup.courierapp.apimodel.RequestRegister;
 import com.fdmgroup.courierapp.apimodel.ResponseRegister;
-import com.fdmgroup.courierapp.exception.DuplicateAccountException;
-import com.fdmgroup.courierapp.exception.PasswordRuleException;
 import com.fdmgroup.courierapp.model.Account;
 import com.fdmgroup.courierapp.model.Sender;
 import com.fdmgroup.courierapp.service.AccountService;
@@ -14,7 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-//@CrossOrigin(origins = "http://localhost:3000")
+@CrossOrigin(origins = "http://localhost:3000")
 public class AccountController {
     @Autowired
     AccountService accountService;
