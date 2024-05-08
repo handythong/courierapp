@@ -2,8 +2,10 @@ package com.fdmgroup.courierapp.controller;
 import com.fdmgroup.courierapp.apimodel.RequestRegister;
 import com.fdmgroup.courierapp.apimodel.ResponseRegister;
 import com.fdmgroup.courierapp.model.Account;
+import com.fdmgroup.courierapp.model.Courier;
 import com.fdmgroup.courierapp.model.Sender;
 import com.fdmgroup.courierapp.service.AccountService;
+import com.fdmgroup.courierapp.service.CourierService;
 import com.fdmgroup.courierapp.service.SenderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -19,8 +21,11 @@ public class AccountController {
     @Autowired
     SenderService senderService;
 
+    @Autowired
+    CourierService courierService;
+
     @PostMapping("/register")
-    public ResponseEntity<ResponseRegister> registerUser(@RequestBody RequestRegister requestRegister) {
+    public ResponseEntity<ResponseRegister> registerSender(@RequestBody RequestRegister requestRegister) {
         //check duplicate email
         if (senderService.isDuplicateEmail(requestRegister.getEmail())){
             ResponseRegister response = new ResponseRegister("Failed", "Duplicate Email");
@@ -31,6 +36,11 @@ public class AccountController {
         newAccount.setUsername(requestRegister.getUsername());
         newAccount.setPassword(requestRegister.getPassword());
         newAccount.setAccountType("Sender");
+        //Sender object creation
+        Sender sender = new Sender();
+        sender.setFullName(requestRegister.getFullName());
+        sender.setEmail(requestRegister.getEmail());
+        sender.setPhoneNo(requestRegister.getPhoneNo());
         //Registering new account
         try {
             newAccount = accountService.registerAccount(newAccount);
@@ -38,14 +48,38 @@ public class AccountController {
             ResponseRegister response = new ResponseRegister("Failed", e.getMessage());
             return new ResponseEntity<ResponseRegister>(response, HttpStatus.OK);
         }
-        //Sender object creation
-        Sender sender = new Sender();
-        sender.setFullName(requestRegister.getFullName());
-        sender.setEmail(requestRegister.getEmail());
-        sender.setPhoneNo(requestRegister.getPhoneNo());
         sender.setAccountId(newAccount.getAccountId());
         senderService.registerSender(sender);
-        ResponseRegister response = new ResponseRegister("Success", "Account Registered Successfully");
+        ResponseRegister response = new ResponseRegister("Success", "Sender Account Registered Successfully");
+        return new ResponseEntity<ResponseRegister>(response, HttpStatus.OK);
+    }
+
+    @PostMapping("/registerCourier")
+    public ResponseEntity<ResponseRegister> registerCourier(@RequestBody RequestRegister requestRegister) {
+        //Account object creation
+        Account newAccount = new Account();
+        newAccount.setUsername(requestRegister.getUsername());
+        newAccount.setPassword(requestRegister.getPassword());
+        newAccount.setAccountType("Courier");
+        //Courier object creation
+        Courier courier = new Courier();
+        courier.setFullName(requestRegister.getFullName());
+        try {
+            courier.setVehicleCapacity(Float.parseFloat(requestRegister.getVehicleCapacity()));
+        } catch (Exception e) {
+            ResponseRegister response = new ResponseRegister("Failed", "Invalid Vehicle Capacity Input");
+            return new ResponseEntity<ResponseRegister>(response, HttpStatus.OK);
+        }
+        //Registering new account
+        try {
+            newAccount = accountService.registerAccount(newAccount);
+        } catch (Exception e) {
+            ResponseRegister response = new ResponseRegister("Failed", e.getMessage());
+            return new ResponseEntity<ResponseRegister>(response, HttpStatus.OK);
+        }
+        courier.setAccountId(newAccount.getAccountId());
+        courierService.registerCourier(courier);
+        ResponseRegister response = new ResponseRegister("Success", "Courier Account Registered Successfully");
         return new ResponseEntity<ResponseRegister>(response, HttpStatus.OK);
     }
 }

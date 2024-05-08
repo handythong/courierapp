@@ -6,16 +6,18 @@ public class RequestRegister {
     private String fullName;
     private String email;
     private String phoneNo;
+    private String vehicleCapacity;
 
     public RequestRegister() {
     }
 
-    public RequestRegister(String username, String password, String fullName, String email, String phoneNo) {
+    public RequestRegister(String username, String password, String fullName, String email, String phoneNo, String vehicleCapacity) {
         this.username = username;
         this.password = password;
         this.fullName = fullName;
         this.email = email;
         this.phoneNo = phoneNo;
+        this.vehicleCapacity = vehicleCapacity;
     }
 
     public String getUsername() {
@@ -56,5 +58,13 @@ public class RequestRegister {
 
     public void setPhoneNo(String phoneNo) {
         this.phoneNo = phoneNo;
+    }
+
+    public String getVehicleCapacity() {
+        return vehicleCapacity;
+    }
+
+    public void setVehicleCapacity(String vehicleCapacity) {
+        this.vehicleCapacity = vehicleCapacity;
     }
 }

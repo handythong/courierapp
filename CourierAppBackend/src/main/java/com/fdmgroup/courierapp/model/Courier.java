@@ -19,7 +19,7 @@ public class Courier {
 	private Long accountId;
 	
 	private String fullName;
-	private int vehicleCapacity;
+	private float vehicleCapacity;
 	private Date lastUpdated;
 	
 	@OneToMany(mappedBy = "courier")
@@ -28,7 +28,7 @@ public class Courier {
 	public Courier() {
 	}
 
-	public Courier(Long accountId, String fullName, int vehicleCapacity, Date lastUpdated, List<OrderItem> orderItemList) {
+	public Courier(Long accountId, String fullName, float vehicleCapacity, Date lastUpdated, List<OrderItem> orderItemList) {
 		this.accountId = accountId;
 		this.fullName = fullName;
 		this.vehicleCapacity = vehicleCapacity;
@@ -52,11 +52,11 @@ public class Courier {
 		this.fullName = fullName;
 	}
 
-	public int getVehicleCapacity() {
+	public float getVehicleCapacity() {
 		return vehicleCapacity;
 	}
 
-	public void setVehicleCapacity(int vehicleCapacity) {
+	public void setVehicleCapacity(float vehicleCapacity) {
 		this.vehicleCapacity = vehicleCapacity;
 	}
 
