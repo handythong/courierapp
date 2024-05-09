@@ -11,5 +11,9 @@ public class ParcelService {
 	
 	@Autowired
 	ParcelRepo parcelRepo;
+
+	public Parcel createParcel(Parcel newParcel) {
+		return parcelRepo.save(newParcel);
+	}
 	
 }

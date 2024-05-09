@@ -5,7 +5,6 @@ import java.util.Date;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -21,7 +20,7 @@ public class AccountService {
 	private AccountRepo accountRepo;
 	
 	@Autowired
-	private SenderService senderService;
+	private CustomerService customerService;
 	
 	@Autowired
 	private PasswordEncoder passwordEncoder;
@@ -33,9 +32,9 @@ public class AccountService {
 			logger.error("User tried to create with existing username");
 			throw new DuplicateAccountException("Username Taken");
 		}
-		if (!newAccount.getPassword().matches("^(?=.*[a-zA-Z])(?=.*\\d).{8,}$")) {
-			logger.error("Password does not contains 8 characters, or at least 1 numbers and 1 alphabet");
-			throw new PasswordRuleException("Password need to contains at least 8 characters and have at least alphabet and number");
+		if (!newAccount.getPassword().matches("(?=.*\\d)(?=.*[a-z])(?=.*[A-Z]).{8,}")) {
+			logger.error("Password does not contains 8 characters, or at least 1 numbers, 1 uppercase, and 1 lowercase");
+			throw new PasswordRuleException("Password need to contains at least 8 characters and have at least 1 uppercase, 1 lowercase and 1 number");
 		}
 		newAccount.setPassword(passwordEncoder.encode(newAccount.getPassword()));
 		newAccount.setCreatedOn(new Date());

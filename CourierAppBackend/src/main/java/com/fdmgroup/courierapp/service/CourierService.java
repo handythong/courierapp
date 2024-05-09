@@ -1,6 +1,5 @@
 package com.fdmgroup.courierapp.service;
 
-import com.fdmgroup.courierapp.model.Sender;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
