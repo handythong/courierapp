@@ -1,16 +1,16 @@
 package com.fdmgroup.courierapp.controller;
 
-import com.fdmgroup.courierapp.service.SenderService;
+import com.fdmgroup.courierapp.service.CustomerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-@RequestMapping("/sender")
+@RequestMapping("/customer")
 @RestController
 @CrossOrigin(origins = "http://localhost:3000")
-public class SenderController {
+public class CustomerController {
     @Autowired
-    SenderService senderService;
+    CustomerService customerService;
 
 }

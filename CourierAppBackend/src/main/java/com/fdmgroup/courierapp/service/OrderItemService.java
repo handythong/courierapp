@@ -1,6 +1,7 @@
 package com.fdmgroup.courierapp.service;
 
 import com.fdmgroup.courierapp.exception.OrderNotFoundException;
+import org.hibernate.query.Order;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -22,5 +23,9 @@ public class OrderItemService {
 		} else {
 			throw new OrderNotFoundException();
 		}
+	}
+
+	public OrderItem createOrder(OrderItem orderItem) {
+		return orderItemRepo.save(orderItem);
 	}
 }

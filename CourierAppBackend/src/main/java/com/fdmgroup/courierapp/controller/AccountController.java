@@ -3,10 +3,10 @@ import com.fdmgroup.courierapp.apimodel.RequestRegister;
 import com.fdmgroup.courierapp.apimodel.ResponseRegister;
 import com.fdmgroup.courierapp.model.Account;
 import com.fdmgroup.courierapp.model.Courier;
-import com.fdmgroup.courierapp.model.Sender;
+import com.fdmgroup.courierapp.model.Customer;
 import com.fdmgroup.courierapp.service.AccountService;
 import com.fdmgroup.courierapp.service.CourierService;
-import com.fdmgroup.courierapp.service.SenderService;
+import com.fdmgroup.courierapp.service.CustomerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,7 +19,7 @@ public class AccountController {
     AccountService accountService;
 
     @Autowired
-    SenderService senderService;
+    CustomerService customerService;
 
     @Autowired
     CourierService courierService;
@@ -27,7 +27,7 @@ public class AccountController {
     @PostMapping("/register")
     public ResponseEntity<ResponseRegister> registerSender(@RequestBody RequestRegister requestRegister) {
         //check duplicate email
-        if (senderService.isDuplicateEmail(requestRegister.getEmail())){
+        if (customerService.isDuplicateEmail(requestRegister.getEmail())){
             ResponseRegister response = new ResponseRegister("Failed", "Duplicate Email");
             return new ResponseEntity<ResponseRegister>(response, HttpStatus.OK);
         }
@@ -37,10 +37,10 @@ public class AccountController {
         newAccount.setPassword(requestRegister.getPassword());
         newAccount.setAccountType("Sender");
         //Sender object creation
-        Sender sender = new Sender();
-        sender.setFullName(requestRegister.getFullName());
-        sender.setEmail(requestRegister.getEmail());
-        sender.setPhoneNo(requestRegister.getPhoneNo());
+        Customer customer = new Customer();
+        customer.setFullName(requestRegister.getFullName());
+        customer.setEmail(requestRegister.getEmail());
+        customer.setPhoneNo(requestRegister.getPhoneNo());
         //Registering new account
         try {
             newAccount = accountService.registerAccount(newAccount);
@@ -48,8 +48,8 @@ public class AccountController {
             ResponseRegister response = new ResponseRegister("Failed", e.getMessage());
             return new ResponseEntity<ResponseRegister>(response, HttpStatus.OK);
         }
-        sender.setAccountId(newAccount.getAccountId());
-        senderService.registerSender(sender);
+        customer.setAccountId(newAccount.getAccountId());
+        customerService.registerCustomer(customer);
         ResponseRegister response = new ResponseRegister("Success", "Sender Account Registered Successfully");
         return new ResponseEntity<ResponseRegister>(response, HttpStatus.OK);
     }

@@ -7,12 +7,10 @@ import java.util.List;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToMany;
-import jakarta.persistence.OneToOne;
 
 @Entity
-public class Sender {
+public class Customer {
 
 	@Id
 	@Column(name = "PK_FK_account_Id")
@@ -23,13 +21,13 @@ public class Sender {
 	private String phoneNo;
 	private Date lastUpdated;
 
-	@OneToMany(mappedBy = "sender")
+	@OneToMany(mappedBy = "customer")
 	private List<OrderItem> orderItemList = new ArrayList<OrderItem>();
 
-	public Sender() {
+	public Customer() {
 	}
 
-	public Sender(Long accountId, String fullName, String email, String phoneNo, Date lastUpdated, List<OrderItem> orderItemList) {
+	public Customer(Long accountId, String fullName, String email, String phoneNo, Date lastUpdated, List<OrderItem> orderItemList) {
 		this.accountId = accountId;
 		this.fullName = fullName;
 		this.email = email;
