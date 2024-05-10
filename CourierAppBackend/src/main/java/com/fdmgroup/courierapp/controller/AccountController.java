@@ -48,7 +48,7 @@ public class AccountController {
             ResponseRegister response = new ResponseRegister("Failed", e.getMessage());
             return new ResponseEntity<ResponseRegister>(response, HttpStatus.OK);
         }
-        customer.setAccountId(newAccount.getAccountId());
+        customer.setAccountId(newAccount.getId());
         customerService.registerCustomer(customer);
         ResponseRegister response = new ResponseRegister("Success", "Sender Account Registered Successfully");
         return new ResponseEntity<ResponseRegister>(response, HttpStatus.OK);
@@ -77,7 +77,7 @@ public class AccountController {
             ResponseRegister response = new ResponseRegister("Failed", e.getMessage());
             return new ResponseEntity<ResponseRegister>(response, HttpStatus.OK);
         }
-        courier.setAccountId(newAccount.getAccountId());
+        courier.setAccountId(newAccount.getId());
         courierService.registerCourier(courier);
         ResponseRegister response = new ResponseRegister("Success", "Courier Account Registered Successfully");
         return new ResponseEntity<ResponseRegister>(response, HttpStatus.OK);

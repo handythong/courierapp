@@ -5,12 +5,12 @@ import java.util.Date;
 import jakarta.persistence.*;
 
 @Entity
-public class OrderItem {
+public class CustomerOrder {
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "orderItemId_IdSeq")
-	@SequenceGenerator(name = "orderItemId_IdSeq", sequenceName = "orderItemId_IdSeq", allocationSize = 1, initialValue = 1)
-	private long orderId;
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "CustomerOrderId_IdSeq")
+	@SequenceGenerator(name = "CustomerOrderId_IdSeq", sequenceName = "CustomerOrderId_IdSeq", allocationSize = 1, initialValue = 1)
+	private long id;
 	@Enumerated(EnumType.STRING)
 	private Status status;
 	private Date deliveryDate;
@@ -18,43 +18,43 @@ public class OrderItem {
 	private Date lastUpdated;
 
 	@ManyToOne
-	@JoinColumn(name = "FK_Courier_Id")
+	@JoinColumn(name = "courier_id")
 	private Courier courier;
 	@OneToOne(cascade = CascadeType.ALL)
-	@JoinColumn(name = "FK_Parcel_Id")
+	@JoinColumn(name = "parcel_id")
 	private Parcel parcel;
 	@OneToOne(cascade = CascadeType.ALL)
-	@JoinColumn(name = "FK_Order_Sender_Id")
-	private OrderSender orderSender;
+	@JoinColumn(name = "sender_id")
+	private Sender sender;
 	@OneToOne(cascade = CascadeType.ALL)
-	@JoinColumn(name = "FK_Order_Recipient_Id")
-	private OrderRecipient orderRecipient;
+	@JoinColumn(name = "recipient_id")
+	private Recipient recipient;
 	@ManyToOne
-	@JoinColumn(name = "FK_Customer_Id")
+	@JoinColumn(name = "customer_id")
 	private Customer customer;
 
-	public OrderItem() {
+	public CustomerOrder() {
 	}
 
-	public OrderItem(long orderId, Status status, Date deliveryDate, Date orderDate, Date lastUpdated, Courier courier, Parcel parcel, OrderSender orderSender, OrderRecipient orderRecipient, Customer customer) {
-		this.orderId = orderId;
+	public CustomerOrder(long id, Status status, Date deliveryDate, Date orderDate, Date lastUpdated, Courier courier, Parcel parcel, Sender sender, Recipient recipient, Customer customer) {
+		this.id = id;
 		this.status = status;
 		this.deliveryDate = deliveryDate;
 		this.orderDate = orderDate;
 		this.lastUpdated = lastUpdated;
 		this.courier = courier;
 		this.parcel = parcel;
-		this.orderSender = orderSender;
-		this.orderRecipient = orderRecipient;
+		this.sender = sender;
+		this.recipient = recipient;
 		this.customer = customer;
 	}
 
-	public long getOrderId() {
-		return orderId;
+	public long getId() {
+		return id;
 	}
 
-	public void setOrderId(long orderId) {
-		this.orderId = orderId;
+	public void setId(long id) {
+		this.id = id;
 	}
 
 	public Status getStatus() {
@@ -105,20 +105,20 @@ public class OrderItem {
 		this.parcel = parcel;
 	}
 
-	public OrderSender getOrderSender() {
-		return orderSender;
+	public Sender getSender() {
+		return sender;
 	}
 
-	public void setOrderSender(OrderSender orderSender) {
-		this.orderSender = orderSender;
+	public void setSender(Sender sender) {
+		this.sender = sender;
 	}
 
-	public OrderRecipient getOrderRecipient() {
-		return orderRecipient;
+	public Recipient getRecipient() {
+		return recipient;
 	}
 
-	public void setOrderRecipient(OrderRecipient orderRecipient) {
-		this.orderRecipient = orderRecipient;
+	public void setRecipient(Recipient recipient) {
+		this.recipient = recipient;
 	}
 
 	public Customer getCustomer() {

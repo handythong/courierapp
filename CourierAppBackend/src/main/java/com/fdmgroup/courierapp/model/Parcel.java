@@ -8,7 +8,7 @@ public class Parcel {
 	@Id
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "parcelId_IdSeq")
 	@SequenceGenerator(name = "parcelId_IdSeq", sequenceName = "parcelId_IdSeq", allocationSize = 1, initialValue = 1)
-	private long parcelId;
+	private long id;
 
 	private float weight;
 	private float length;
@@ -17,27 +17,27 @@ public class Parcel {
 	private String description;
 
 	@OneToOne(mappedBy = "parcel")
-	private OrderItem orderItem;
+	private CustomerOrder customerOrder;
 
 	public Parcel() {
 	}
 
-	public Parcel(long parcelId, float weight, float length, float width, float height, String description, OrderItem orderItem) {
-		this.parcelId = parcelId;
+	public Parcel(long id, float weight, float length, float width, float height, String description, CustomerOrder customerOrder) {
+		this.id = id;
 		this.weight = weight;
 		this.length = length;
 		this.width = width;
 		this.height = height;
 		this.description = description;
-		this.orderItem = orderItem;
+		this.customerOrder = customerOrder;
 	}
 
-	public long getParcelId() {
-		return parcelId;
+	public long getId() {
+		return id;
 	}
 
-	public void setParcelId(long parcelId) {
-		this.parcelId = parcelId;
+	public void setId(long id) {
+		this.id = id;
 	}
 
 	public float getWeight() {
@@ -80,11 +80,11 @@ public class Parcel {
 		this.description = description;
 	}
 
-	public OrderItem getOrderItem() {
-		return orderItem;
+	public CustomerOrder getOrderItem() {
+		return customerOrder;
 	}
 
-	public void setOrderItem(OrderItem orderItem) {
-		this.orderItem = orderItem;
+	public void setOrderItem(CustomerOrder customerOrder) {
+		this.customerOrder = customerOrder;
 	}
 }

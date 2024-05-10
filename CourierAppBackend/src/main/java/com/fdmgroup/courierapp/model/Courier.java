@@ -7,15 +7,13 @@ import java.util.List;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToMany;
-import jakarta.persistence.OneToOne;
 
 @Entity
 public class Courier {
 	
 	@Id
-	@Column(name = "PK_FK_account_Id")
+	@Column(name = "account_id")
 	private Long accountId;
 	
 	private String fullName;
@@ -23,17 +21,17 @@ public class Courier {
 	private Date lastUpdated;
 	
 	@OneToMany(mappedBy = "courier")
-	private List<OrderItem> orderItemList = new ArrayList<OrderItem>();
+	private List<CustomerOrder> customerOrderList = new ArrayList<CustomerOrder>();
 
 	public Courier() {
 	}
 
-	public Courier(Long accountId, String fullName, float vehicleCapacity, Date lastUpdated, List<OrderItem> orderItemList) {
+	public Courier(Long accountId, String fullName, float vehicleCapacity, Date lastUpdated, List<CustomerOrder> customerOrderList) {
 		this.accountId = accountId;
 		this.fullName = fullName;
 		this.vehicleCapacity = vehicleCapacity;
 		this.lastUpdated = lastUpdated;
-		this.orderItemList = orderItemList;
+		this.customerOrderList = customerOrderList;
 	}
 
 	public Long getAccountId() {
@@ -68,11 +66,11 @@ public class Courier {
 		this.lastUpdated = lastUpdated;
 	}
 
-	public List<OrderItem> getOrderItemList() {
-		return orderItemList;
+	public List<CustomerOrder> getOrderItemList() {
+		return customerOrderList;
 	}
 
-	public void setOrderItemList(List<OrderItem> orderItemList) {
-		this.orderItemList = orderItemList;
+	public void setOrderItemList(List<CustomerOrder> customerOrderList) {
+		this.customerOrderList = customerOrderList;
 	}
 }
