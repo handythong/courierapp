@@ -16,8 +16,8 @@ public class CustomerService {
 	private CustomerRepo customerRepo;
 	
 	public Boolean isDuplicateEmail(String email) {
-		Optional<Customer> optSender = customerRepo.findByEmail(email);
-		return optSender.isPresent();
+		Optional<Customer> optCustomer = customerRepo.findByEmail(email);
+		return optCustomer.isPresent();
 	}
 
 	public Customer registerCustomer(Customer newCustomer) {

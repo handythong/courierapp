@@ -4,9 +4,9 @@ import com.fdmgroup.courierapp.apimodel.OrderDetails;
 import com.fdmgroup.courierapp.apimodel.RequestOrder;
 import com.fdmgroup.courierapp.apimodel.ResponseOrder;
 import com.fdmgroup.courierapp.model.*;
-import com.fdmgroup.courierapp.service.OrderItemService;
-import com.fdmgroup.courierapp.service.OrderRecipientService;
-import com.fdmgroup.courierapp.service.OrderSenderService;
+import com.fdmgroup.courierapp.service.CustomerOrderService;
+import com.fdmgroup.courierapp.service.RecipientService;
+import com.fdmgroup.courierapp.service.SenderService;
 import com.fdmgroup.courierapp.service.ParcelService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -21,13 +21,13 @@ import java.util.Date;
 @CrossOrigin(origins = "http://localhost:3000")
 public class OrderItemController {
     @Autowired
-    OrderItemService orderItemService;
+    CustomerOrderService customerOrderService;
     @Autowired
     ParcelService parcelService;
     @Autowired
-    OrderSenderService orderSenderService;
+    SenderService senderService;
     @Autowired
-    OrderRecipientService orderRecipientService;
+    RecipientService recipientService;
     
     @PostMapping("/create-order")
     public ResponseEntity<ResponseOrder> login(@RequestBody RequestOrder requestOrder) {
@@ -39,21 +39,21 @@ public class OrderItemController {
             return new ResponseEntity<ResponseOrder>(new ResponseOrder("Failed", "Parcel detail input is invalid"), HttpStatus.OK);
         }
 
-        OrderSender newOrderSender = generateOrderSender(requestOrder);
-        OrderRecipient newOrderRecipient = generateOrderRecipient(requestOrder);
+        Sender newSender = generateOrderSender(requestOrder);
+        Recipient newRecipient = generateOrderRecipient(requestOrder);
 
         //OrderItem creation
-        OrderItem newOrderItem = new OrderItem();
-        newOrderItem.setOrderDate(new Date());
-        newOrderItem.setLastUpdated(new Date());
-        newOrderItem.setDeliveryDate(generateDeliveryDate());
-        newOrderItem.setOrderSender(newOrderSender);
-        newOrderItem.setOrderRecipient(newOrderRecipient);
-        newOrderItem.setParcel(newParcel);
-        newOrderItem.setStatus(Status.PROCESSING);
-        newOrderItem = orderItemService.createOrder(newOrderItem);
+        CustomerOrder newCustomerOrder = new CustomerOrder();
+        newCustomerOrder.setOrderDate(new Date());
+        newCustomerOrder.setLastUpdated(new Date());
+        newCustomerOrder.setDeliveryDate(generateDeliveryDate());
+        newCustomerOrder.setSender(newSender);
+        newCustomerOrder.setRecipient(newRecipient);
+        newCustomerOrder.setParcel(newParcel);
+        newCustomerOrder.setStatus(Status.PROCESSING);
+        newCustomerOrder = customerOrderService.createOrder(newCustomerOrder);
 
-        OrderDetails orderDetails = generateOrderDetails(newOrderItem);
+        OrderDetails orderDetails = generateOrderDetails(newCustomerOrder);
         return new ResponseEntity<ResponseOrder>(new ResponseOrder("Success", "Order Created Successfully", orderDetails), HttpStatus.OK);
     }
 
@@ -67,22 +67,22 @@ public class OrderItemController {
         return newParcel;
     }
 
-    private OrderSender generateOrderSender(RequestOrder requestOrder) {
-        OrderSender newOrderSender = new OrderSender();
-        newOrderSender.setSenderEmail(requestOrder.getFromEmail());
-        newOrderSender.setSenderPhoneNo(requestOrder.getFromPhone());
-        newOrderSender.setSenderFullName(requestOrder.getFromFullName());
-        newOrderSender.setPickupAddress(requestOrder.getFromAddress());
-        return newOrderSender;
+    private Sender generateOrderSender(RequestOrder requestOrder) {
+        Sender newSender = new Sender();
+        newSender.setEmail(requestOrder.getFromEmail());
+        newSender.setPhoneNo(requestOrder.getFromPhone());
+        newSender.setFullName(requestOrder.getFromFullName());
+        newSender.setPickupAddress(requestOrder.getFromAddress());
+        return newSender;
     }
 
-    private OrderRecipient generateOrderRecipient(RequestOrder requestOrder) {
-        OrderRecipient newOrderRecipient = new OrderRecipient();
-        newOrderRecipient.setRecipientEmail(requestOrder.getToEmail());
-        newOrderRecipient.setRecipientPhoneNo(requestOrder.getToPhone());
-        newOrderRecipient.setRecipientFullName(requestOrder.getToFullName());
-        newOrderRecipient.setDeliveryAddress(requestOrder.getToAddress());
-        return newOrderRecipient;
+    private Recipient generateOrderRecipient(RequestOrder requestOrder) {
+        Recipient newRecipient = new Recipient();
+        newRecipient.setEmail(requestOrder.getToEmail());
+        newRecipient.setPhoneNo(requestOrder.getToPhone());
+        newRecipient.setFullName(requestOrder.getToFullName());
+        newRecipient.setDeliveryAddress(requestOrder.getToAddress());
+        return newRecipient;
     }
 
     private Date generateDeliveryDate() {
@@ -92,25 +92,25 @@ public class OrderItemController {
         return calendar.getTime();
     }
 
-    private OrderDetails generateOrderDetails(OrderItem orderItem) {
+    private OrderDetails generateOrderDetails(CustomerOrder customerOrder) {
         OrderDetails newOrderDetails = new OrderDetails();
-        newOrderDetails.setOrderId(orderItem.getOrderId());
-        newOrderDetails.setOrderStatus(orderItem.getStatus().toString());
-        newOrderDetails.setDeliveryDate(orderItem.getDeliveryDate());
-        newOrderDetails.setOrderDate(orderItem.getOrderDate());
-        newOrderDetails.setFromAddress(orderItem.getOrderSender().getPickupAddress());
-        newOrderDetails.setFromFullName(orderItem.getOrderSender().getSenderFullName());
-        newOrderDetails.setFromEmail(orderItem.getOrderSender().getSenderEmail());
-        newOrderDetails.setFromPhoneNo(orderItem.getOrderSender().getSenderPhoneNo());
-        newOrderDetails.setToAddress(orderItem.getOrderRecipient().getDeliveryAddress());
-        newOrderDetails.setToFullName(orderItem.getOrderRecipient().getRecipientFullName());
-        newOrderDetails.setToEmail(orderItem.getOrderRecipient().getRecipientEmail());
-        newOrderDetails.setToPhoneNo(orderItem.getOrderRecipient().getRecipientPhoneNo());
-        newOrderDetails.setWeight(orderItem.getParcel().getWeight());
-        newOrderDetails.setWidth(orderItem.getParcel().getWidth());
-        newOrderDetails.setHeight(orderItem.getParcel().getHeight());
-        newOrderDetails.setLength(orderItem.getParcel().getLength());
-        newOrderDetails.setParcelDescription(orderItem.getParcel().getDescription());
+        newOrderDetails.setOrderId(customerOrder.getId());
+        newOrderDetails.setOrderStatus(customerOrder.getStatus().toString());
+        newOrderDetails.setDeliveryDate(customerOrder.getDeliveryDate());
+        newOrderDetails.setOrderDate(customerOrder.getOrderDate());
+        newOrderDetails.setFromAddress(customerOrder.getSender().getPickupAddress());
+        newOrderDetails.setFromFullName(customerOrder.getSender().getFullName());
+        newOrderDetails.setFromEmail(customerOrder.getSender().getEmail());
+        newOrderDetails.setFromPhoneNo(customerOrder.getSender().getPhoneNo());
+        newOrderDetails.setToAddress(customerOrder.getRecipient().getDeliveryAddress());
+        newOrderDetails.setToFullName(customerOrder.getRecipient().getFullName());
+        newOrderDetails.setToEmail(customerOrder.getRecipient().getEmail());
+        newOrderDetails.setToPhoneNo(customerOrder.getRecipient().getPhoneNo());
+        newOrderDetails.setWeight(customerOrder.getParcel().getWeight());
+        newOrderDetails.setWidth(customerOrder.getParcel().getWidth());
+        newOrderDetails.setHeight(customerOrder.getParcel().getHeight());
+        newOrderDetails.setLength(customerOrder.getParcel().getLength());
+        newOrderDetails.setParcelDescription(customerOrder.getParcel().getDescription());
         return newOrderDetails;
     }
 }

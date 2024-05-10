@@ -13,7 +13,7 @@ import jakarta.persistence.OneToMany;
 public class Customer {
 
 	@Id
-	@Column(name = "PK_FK_account_Id")
+	@Column(name = "account_id")
 	private Long accountId;
 
 	private String fullName;
@@ -22,18 +22,18 @@ public class Customer {
 	private Date lastUpdated;
 
 	@OneToMany(mappedBy = "customer")
-	private List<OrderItem> orderItemList = new ArrayList<OrderItem>();
+	private List<CustomerOrder> customerOrderList = new ArrayList<CustomerOrder>();
 
 	public Customer() {
 	}
 
-	public Customer(Long accountId, String fullName, String email, String phoneNo, Date lastUpdated, List<OrderItem> orderItemList) {
+	public Customer(Long accountId, String fullName, String email, String phoneNo, Date lastUpdated, List<CustomerOrder> customerOrderList) {
 		this.accountId = accountId;
 		this.fullName = fullName;
 		this.email = email;
 		this.phoneNo = phoneNo;
 		this.lastUpdated = lastUpdated;
-		this.orderItemList = orderItemList;
+		this.customerOrderList = customerOrderList;
 	}
 
 	public Long getAccountId() {
@@ -76,11 +76,11 @@ public class Customer {
 		this.lastUpdated = lastUpdated;
 	}
 
-	public List<OrderItem> getOrderItemList() {
-		return orderItemList;
+	public List<CustomerOrder> getOrderItemList() {
+		return customerOrderList;
 	}
 
-	public void setOrderItemList(List<OrderItem> orderItemList) {
-		this.orderItemList = orderItemList;
+	public void setOrderItemList(List<CustomerOrder> customerOrderList) {
+		this.customerOrderList = customerOrderList;
 	}
 }

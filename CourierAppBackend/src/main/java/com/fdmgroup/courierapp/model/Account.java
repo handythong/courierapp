@@ -6,7 +6,6 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.OneToOne;
 import jakarta.persistence.SequenceGenerator;
 
 @Entity
@@ -15,7 +14,7 @@ public class Account {
 	@Id
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "accountId_IdSeq")
 	@SequenceGenerator(name = "accountId_IdSeq", sequenceName = "accountId_IdSeq", allocationSize = 1, initialValue = 1)
-	private long accountId;
+	private long id;
 	
 	private String username;
 	private String password;
@@ -26,10 +25,10 @@ public class Account {
 	public Account() {
 	}
 
-	public Account(long accountId, String username, String password, String accountType,
+	public Account(long id, String username, String password, String accountType,
 				   Date lastUpdated, Date createdOn) {
 		super();
-		this.accountId = accountId;
+		this.id = id;
 		this.username = username;
 		this.password = password;
 		this.accountType = accountType;
@@ -37,12 +36,12 @@ public class Account {
 		this.createdOn = createdOn;
 	}
 
-	public long getAccountId() {
-		return accountId;
+	public long getId() {
+		return id;
 	}
 
-	public void setAccountId(long accountId) {
-		this.accountId = accountId;
+	public void setId(long id) {
+		this.id = id;
 	}
 
 	public String getUsername() {
