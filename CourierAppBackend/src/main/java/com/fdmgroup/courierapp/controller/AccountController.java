@@ -1,15 +1,26 @@
 package com.fdmgroup.courierapp.controller;
+import com.fdmgroup.courierapp.apimodel.RequestLogin;
 import com.fdmgroup.courierapp.apimodel.RequestRegister;
+import com.fdmgroup.courierapp.apimodel.ResponseLogin;
 import com.fdmgroup.courierapp.apimodel.ResponseRegister;
 import com.fdmgroup.courierapp.model.Account;
 import com.fdmgroup.courierapp.model.Courier;
 import com.fdmgroup.courierapp.model.Customer;
+import com.fdmgroup.courierapp.security.JwtProvider;
 import com.fdmgroup.courierapp.service.AccountService;
 import com.fdmgroup.courierapp.service.CourierService;
 import com.fdmgroup.courierapp.service.CustomerService;
+import com.fdmgroup.courierapp.service.UserDetailsServiceImplementation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -24,6 +35,12 @@ public class AccountController {
     @Autowired
     CourierService courierService;
 
+    @Autowired
+    private UserDetailsServiceImplementation customUserDetails;
+
+    @Autowired
+    PasswordEncoder passwordEncoder;
+
     @PostMapping("/register")
     public ResponseEntity<ResponseRegister> registerSender(@RequestBody RequestRegister requestRegister) {
         //check duplicate email
@@ -35,7 +52,7 @@ public class AccountController {
         Account newAccount = new Account();
         newAccount.setUsername(requestRegister.getUsername());
         newAccount.setPassword(requestRegister.getPassword());
-        newAccount.setAccountType("Sender");
+        newAccount.setRole("ROLE_SENDER");
         //Sender object creation
         Customer customer = new Customer();
         customer.setFullName(requestRegister.getFullName());
@@ -60,7 +77,7 @@ public class AccountController {
         Account newAccount = new Account();
         newAccount.setUsername(requestRegister.getUsername());
         newAccount.setPassword(requestRegister.getPassword());
-        newAccount.setAccountType("Courier");
+        newAccount.setRole("ROLE_COURIER");
         //Courier object creation
         Courier courier = new Courier();
         courier.setFullName(requestRegister.getFullName());
@@ -81,5 +98,41 @@ public class AccountController {
         courierService.registerCourier(courier);
         ResponseRegister response = new ResponseRegister("Success", "Courier Account Registered Successfully");
         return new ResponseEntity<ResponseRegister>(response, HttpStatus.OK);
+    }
+
+    @PostMapping("/login")
+    public ResponseEntity<ResponseLogin> login(@RequestBody RequestLogin requestLogin) {
+        String username = requestLogin.getUsername();
+        String password = requestLogin.getPassword();
+        try {
+            Authentication authentication = authenticate(username, password);
+            SecurityContextHolder.getContext().setAuthentication(authentication);
+            String token = JwtProvider.generateToken(authentication);
+            String role = authentication.getAuthorities().toString();
+            ResponseLogin responseLogin = new ResponseLogin("Success","Login Success", role, token);
+            return new ResponseEntity<>(responseLogin, HttpStatus.OK);
+        } catch (Exception e) {
+            ResponseLogin responseLogin = new ResponseLogin("Failed", e.getMessage());
+            return new ResponseEntity<>(responseLogin, HttpStatus.OK);
+        }
+    }
+
+    @PostMapping("/logout")
+    public ResponseEntity<Void> logOut(){
+        Authentication authentication = new UsernamePasswordAuthenticationToken(
+                null, null, null
+        );
+
+        SecurityContextHolder.getContext().setAuthentication(authentication);
+        return ResponseEntity.ok().build();
+    }
+
+    private Authentication authenticate(String username, String password) throws BadCredentialsException, UsernameNotFoundException {
+        UserDetails userDetails = customUserDetails.loadUserByUsername(username);
+        if(!passwordEncoder.matches(password,userDetails.getPassword())) {
+            throw new BadCredentialsException("Invalid password");
+        } else {
+            return new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
+        }
     }
 }

@@ -18,20 +18,20 @@ public class Account {
 	
 	private String username;
 	private String password;
-	private String accountType;
+	private String role;
 	private Date lastUpdated;
 	private Date createdOn;
 
 	public Account() {
 	}
 
-	public Account(long id, String username, String password, String accountType,
+	public Account(long id, String username, String password, String role,
 				   Date lastUpdated, Date createdOn) {
 		super();
 		this.id = id;
 		this.username = username;
 		this.password = password;
-		this.accountType = accountType;
+		this.role = role;
 		this.lastUpdated = lastUpdated;
 		this.createdOn = createdOn;
 	}
@@ -60,12 +60,12 @@ public class Account {
 		this.password = password;
 	}
 
-	public String getAccountType() {
-		return accountType;
+	public String getRole() {
+		return role;
 	}
 
-	public void setAccountType(String accountType) {
-		this.accountType = accountType;
+	public void setRole(String role) {
+		this.role = role;
 	}
 
 	public Date getLastUpdated() {
