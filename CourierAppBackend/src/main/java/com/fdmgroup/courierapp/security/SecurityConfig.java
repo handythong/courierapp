@@ -30,7 +30,9 @@ public class SecurityConfig {
                 .sessionManagement(management -> management.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(
                         authorize -> authorize.requestMatchers("/login", "/register", "/registerCourier")
-                                .permitAll().anyRequest().authenticated());
+                                .permitAll()
+                                .requestMatchers("/orders/**").hasRole("SENDER")
+                                .anyRequest().authenticated());
         return http.build();
     }
 }
