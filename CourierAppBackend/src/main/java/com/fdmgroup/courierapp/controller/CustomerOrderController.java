@@ -16,7 +16,6 @@ import org.springframework.web.bind.annotation.*;
 import java.util.Calendar;
 import java.util.Date;
 
-@RequestMapping("/orders")
 @RestController
 @CrossOrigin(origins = "http://localhost:3000")
 public class CustomerOrderController {
@@ -33,7 +32,7 @@ public class CustomerOrderController {
     @Autowired
     CustomerOrderUtil customerOrderUtil;
     
-    @PostMapping("/create-order")
+    @PostMapping("/orders/create-order")
     public ResponseEntity<ResponseOrder> createOrder(@RequestHeader("username") String username, @RequestBody RequestOrder requestOrder) {
 
         Parcel newParcel;
@@ -67,5 +66,16 @@ public class CustomerOrderController {
         return new ResponseEntity<ResponseOrder>(new ResponseOrder("Success", "Order Created Successfully", orderDetails), HttpStatus.OK);
     }
 
+    @GetMapping("/track/{orderId}")
+    public ResponseEntity<ResponseOrder> retrieveOrderId(@PathVariable("orderId") Long orderId) throws Exception {
+        CustomerOrder customerOrder;
+        try {
+            customerOrder = customerOrderService.findByCustomerOrderId(orderId);
+            OrderDetails orderDetails = customerOrderUtil.generateOrderDetails(customerOrder);
+            return new ResponseEntity<ResponseOrder>(new ResponseOrder("Success", "Order Retrieved Successfully", orderDetails), HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<ResponseOrder>(new ResponseOrder("Failed", "Order ID not found in database", null), HttpStatus.OK);
+        }
+    }
 
 }
