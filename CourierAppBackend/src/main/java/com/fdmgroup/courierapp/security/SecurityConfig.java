@@ -29,7 +29,7 @@ public class SecurityConfig {
                 .csrf(csrf -> csrf.disable())
                 .sessionManagement(management -> management.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(
-                        authorize -> authorize.requestMatchers("/login", "/register", "/registerCourier")
+                        authorize -> authorize.requestMatchers("/login", "/register", "/registerCourier", "/track/**")
                                 .permitAll()
                                 .requestMatchers("/orders/**").hasRole("SENDER")
                                 .anyRequest().authenticated());

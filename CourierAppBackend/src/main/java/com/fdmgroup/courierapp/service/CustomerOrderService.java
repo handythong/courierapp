@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import com.fdmgroup.courierapp.model.CustomerOrder;
 import com.fdmgroup.courierapp.repository.CustomerOrderRepo;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -26,5 +27,10 @@ public class CustomerOrderService {
 
 	public CustomerOrder createOrder(CustomerOrder customerOrder) {
 		return customerOrderRepo.save(customerOrder);
+	}
+
+	public List<CustomerOrder> getOrderHistoryByCustomerId(Long customerId) {
+		List<CustomerOrder> customerOrders = customerOrderRepo.findAllWithCustomerIdDesc(customerId);
+		return customerOrders;
 	}
 }

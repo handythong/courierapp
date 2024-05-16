@@ -5,6 +5,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
+import com.fdmgroup.courierapp.model.Customer;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
