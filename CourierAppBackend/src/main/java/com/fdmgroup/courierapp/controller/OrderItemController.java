@@ -116,11 +116,13 @@ public class OrderItemController {
 
     @GetMapping("/orders/{orderId}")
     public ResponseEntity<ResponseOrder> retrieveOrderId(@PathVariable("orderId") Long orderId) throws Exception {
-        CustomerOrder customerOrder = customerOrderService.findByCustomerOrderId(orderId);
-        if (customerOrder == null) {
+        CustomerOrder customerOrder;
+        try {
+            customerOrder = customerOrderService.findByCustomerOrderId(orderId);
+            OrderDetails orderDetails = generateOrderDetails(customerOrder);
+            return new ResponseEntity<ResponseOrder>(new ResponseOrder("Success", "Order Retrieved Successfully", orderDetails), HttpStatus.OK);
+        } catch (Exception e) {
             return new ResponseEntity<ResponseOrder>(new ResponseOrder("Failed", "Order ID not found in database", null), HttpStatus.OK);
         }
-        OrderDetails orderDetails = generateOrderDetails(customerOrder);
-        return new ResponseEntity<ResponseOrder>(new ResponseOrder("Success", "Order Retrieved Successfully", orderDetails), HttpStatus.OK);
     }
 }
