@@ -118,7 +118,7 @@ public class AccountController {
     }
 
     @PostMapping("/logout")
-    public ResponseEntity<Void> logOut(){
+    public ResponseEntity<Void> logout(){
         Authentication authentication = new UsernamePasswordAuthenticationToken(
                 null, null, null
         );
