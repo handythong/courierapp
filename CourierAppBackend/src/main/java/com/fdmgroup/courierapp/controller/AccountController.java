@@ -81,8 +81,14 @@ public class AccountController {
         //Courier object creation
         Courier courier = new Courier();
         courier.setFullName(requestRegister.getFullName());
+        float vehicleCapacity;
         try {
-            courier.setVehicleCapacity(Float.parseFloat(requestRegister.getVehicleCapacity()));
+            vehicleCapacity = Float.parseFloat(requestRegister.getVehicleCapacity())
+            if (vehicleCapacity <= 0) {
+                ResponseRegister response = new ResponseRegister("Failed", "Invalid Vehicle Capacity Input");
+                return new ResponseEntity<ResponseRegister>(response, HttpStatus.OK);
+            }
+            courier.setVehicleCapacity(vehicleCapacity);
         } catch (Exception e) {
             ResponseRegister response = new ResponseRegister("Failed", "Invalid Vehicle Capacity Input");
             return new ResponseEntity<ResponseRegister>(response, HttpStatus.OK);
