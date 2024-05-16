@@ -34,7 +34,7 @@ public class CustomerOrderController {
     CustomerOrderUtil customerOrderUtil;
     
     @PostMapping("/create-order")
-    public ResponseEntity<ResponseOrder> login(@RequestHeader("username") String username, @RequestBody RequestOrder requestOrder) {
+    public ResponseEntity<ResponseOrder> createOrder(@RequestHeader("username") String username, @RequestBody RequestOrder requestOrder) {
 
         Parcel newParcel;
         Customer customer;
