@@ -44,7 +44,7 @@ public class CustomerOrderUtil {
     public Date generateDeliveryDate() {
         // 5 days from order date
         Calendar calendar = Calendar.getInstance();
-        calendar.add(Calendar.DAY_OF_YEAR, 3);
+        calendar.add(Calendar.DAY_OF_YEAR, 5);
         return calendar.getTime();
     }
 
