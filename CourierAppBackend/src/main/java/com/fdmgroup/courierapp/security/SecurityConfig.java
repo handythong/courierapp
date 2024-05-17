@@ -29,9 +29,10 @@ public class SecurityConfig {
                 .csrf(csrf -> csrf.disable())
                 .sessionManagement(management -> management.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(
-                        authorize -> authorize.requestMatchers("/login", "/register", "/registerCourier", "/track/**")
+                        authorize -> authorize.requestMatchers("/login", "/logout", "/register", "/registerCourier", "/track/**")
                                 .permitAll()
-                                .requestMatchers("/orders/**").hasRole("SENDER")
+                                .requestMatchers("/orders/create-order", "/customer/**").hasRole("SENDER")
+                                .requestMatchers("/courier/**").hasRole("COURIER")
                                 .anyRequest().authenticated());
         return http.build();
     }
