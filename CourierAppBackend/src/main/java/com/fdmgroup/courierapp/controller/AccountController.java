@@ -83,7 +83,7 @@ public class AccountController {
         courier.setFullName(requestRegister.getFullName());
         float vehicleCapacity;
         try {
-            vehicleCapacity = Float.parseFloat(requestRegister.getVehicleCapacity())
+            vehicleCapacity = Float.parseFloat(requestRegister.getVehicleCapacity());
             if (vehicleCapacity <= 0) {
                 ResponseRegister response = new ResponseRegister("Failed", "Invalid Vehicle Capacity Input");
                 return new ResponseEntity<ResponseRegister>(response, HttpStatus.OK);
