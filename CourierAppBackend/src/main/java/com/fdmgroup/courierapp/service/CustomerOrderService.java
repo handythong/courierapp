@@ -30,7 +30,10 @@ public class CustomerOrderService {
 	}
 
 	public List<CustomerOrder> getOrderHistoryByCustomerId(Long customerId) {
-		List<CustomerOrder> customerOrders = customerOrderRepo.findAllWithCustomerIdDesc(customerId);
-		return customerOrders;
+		return customerOrderRepo.findAllWithCustomerIdDesc(customerId);
+	}
+
+	public List<CustomerOrder> getOrderHistoryByCourierId(Long courierId) {
+		return customerOrderRepo.findAllWithCourierIdDesc(courierId);
 	}
 }

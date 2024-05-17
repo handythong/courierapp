@@ -52,7 +52,7 @@ public class AccountController {
         Account newAccount = new Account();
         newAccount.setUsername(requestRegister.getUsername());
         newAccount.setPassword(requestRegister.getPassword());
-        newAccount.setRole("ROLE_SENDER");
+        newAccount.setRole("ROLE_CUSTOMER");
         //Sender object creation
         Customer customer = new Customer();
         customer.setFullName(requestRegister.getFullName());
