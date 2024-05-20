@@ -1,4 +1,5 @@
 package com.fdmgroup.courierapp.controller;
+
 import com.fdmgroup.courierapp.apimodel.RequestLogin;
 import com.fdmgroup.courierapp.apimodel.RequestRegister;
 import com.fdmgroup.courierapp.apimodel.ResponseLogin;
@@ -43,16 +44,24 @@ public class AccountController {
 
     @PostMapping("/register")
     public ResponseEntity<ResponseRegister> registerSender(@RequestBody RequestRegister requestRegister) {
-        //check duplicate email
-        if (customerService.isDuplicateEmail(requestRegister.getEmail())){
-            ResponseRegister response = new ResponseRegister("Failed", "Duplicate Email");
+        //check duplicate email and username
+        Boolean isDuplicateEmail = customerService.isDuplicateEmail(requestRegister.getEmail());
+        Boolean isDuplicateUsername = accountService.isDuplicateUsername(requestRegister.getUsername());
+        if (isDuplicateUsername && isDuplicateEmail) {
+            ResponseRegister response = new ResponseRegister("Failed", "Username and Email taken");
+            return new ResponseEntity<ResponseRegister>(response, HttpStatus.OK);
+        } else if (isDuplicateUsername) {
+            ResponseRegister response = new ResponseRegister("Failed", "Username taken");
+            return new ResponseEntity<ResponseRegister>(response, HttpStatus.OK);
+        } else if (isDuplicateEmail) {
+            ResponseRegister response = new ResponseRegister("Failed", "Email taken");
             return new ResponseEntity<ResponseRegister>(response, HttpStatus.OK);
         }
         //Account object creation
         Account newAccount = new Account();
         newAccount.setUsername(requestRegister.getUsername());
         newAccount.setPassword(requestRegister.getPassword());
-        newAccount.setRole("ROLE_SENDER");
+        newAccount.setRole("ROLE_CUSTOMER");
         //Sender object creation
         Customer customer = new Customer();
         customer.setFullName(requestRegister.getFullName());
@@ -67,12 +76,17 @@ public class AccountController {
         }
         customer.setAccountId(newAccount.getId());
         customerService.registerCustomer(customer);
-        ResponseRegister response = new ResponseRegister("Success", "Sender Account Registered Successfully");
+        ResponseRegister response = new ResponseRegister("Success", "Customer Account Registered Successfully");
         return new ResponseEntity<ResponseRegister>(response, HttpStatus.OK);
     }
 
     @PostMapping("/registerCourier")
     public ResponseEntity<ResponseRegister> registerCourier(@RequestBody RequestRegister requestRegister) {
+        Boolean isDuplicateUsername = accountService.isDuplicateUsername(requestRegister.getUsername());
+        if (isDuplicateUsername) {
+            ResponseRegister response = new ResponseRegister("Failed", "Username taken");
+            return new ResponseEntity<ResponseRegister>(response, HttpStatus.OK);
+        }
         //Account object creation
         Account newAccount = new Account();
         newAccount.setUsername(requestRegister.getUsername());
@@ -115,7 +129,7 @@ public class AccountController {
             SecurityContextHolder.getContext().setAuthentication(authentication);
             String token = JwtProvider.generateToken(authentication);
             String role = authentication.getAuthorities().toString();
-            ResponseLogin responseLogin = new ResponseLogin("Success","Login Success", role, token);
+            ResponseLogin responseLogin = new ResponseLogin("Success", "Login Success", role, token);
             return new ResponseEntity<>(responseLogin, HttpStatus.OK);
         } catch (Exception e) {
             ResponseLogin responseLogin = new ResponseLogin("Failed", e.getMessage());
@@ -124,10 +138,8 @@ public class AccountController {
     }
 
     @PostMapping("/logout")
-    public ResponseEntity<Void> logout(){
-        Authentication authentication = new UsernamePasswordAuthenticationToken(
-                null, null, null
-        );
+    public ResponseEntity<Void> logout() {
+        Authentication authentication = new UsernamePasswordAuthenticationToken(null, null, null);
 
         SecurityContextHolder.getContext().setAuthentication(authentication);
         return ResponseEntity.ok().build();
@@ -135,7 +147,7 @@ public class AccountController {
 
     private Authentication authenticate(String username, String password) throws BadCredentialsException, UsernameNotFoundException {
         UserDetails userDetails = customUserDetails.loadUserByUsername(username);
-        if(!passwordEncoder.matches(password,userDetails.getPassword())) {
+        if (!passwordEncoder.matches(password, userDetails.getPassword())) {
             throw new BadCredentialsException("Invalid password");
         } else {
             return new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
