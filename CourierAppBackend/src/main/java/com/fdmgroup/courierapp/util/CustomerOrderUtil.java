@@ -1,15 +1,15 @@
 package com.fdmgroup.courierapp.util;
 
 import com.fdmgroup.courierapp.apimodel.OrderDetails;
+import com.fdmgroup.courierapp.apimodel.OrderStatus;
 import com.fdmgroup.courierapp.apimodel.RequestOrder;
-import com.fdmgroup.courierapp.model.CustomerOrder;
-import com.fdmgroup.courierapp.model.Parcel;
-import com.fdmgroup.courierapp.model.Recipient;
-import com.fdmgroup.courierapp.model.Sender;
+import com.fdmgroup.courierapp.model.*;
 import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 
 @Component
 public class CustomerOrderUtil {
@@ -48,10 +48,18 @@ public class CustomerOrderUtil {
         return calendar.getTime();
     }
 
+    public Status generateOrderCreatedStatus() {
+        Status status = new Status();
+        status.setStatus(StatusEnum.ORDER_CREATED);
+        status.setRemarks("Order Created");
+        status.setStatusUpdateDate(new Date());
+        return status;
+    }
+
     public OrderDetails generateOrderDetails(CustomerOrder customerOrder) {
         OrderDetails newOrderDetails = new OrderDetails();
         newOrderDetails.setOrderId(customerOrder.getId());
-        newOrderDetails.setOrderStatus(customerOrder.getStatus().toString());
+        newOrderDetails.setOrderStatus(mappedOrderStatus(customerOrder));
         newOrderDetails.setDeliveryDate(customerOrder.getDeliveryDate());
         newOrderDetails.setOrderDate(customerOrder.getOrderDate());
         newOrderDetails.setFromAddress(customerOrder.getSender().getPickupAddress());
@@ -68,5 +76,14 @@ public class CustomerOrderUtil {
         newOrderDetails.setLength(customerOrder.getParcel().getLength());
         newOrderDetails.setParcelDescription(customerOrder.getParcel().getDescription());
         return newOrderDetails;
+    }
+
+    public List<OrderStatus> mappedOrderStatus(CustomerOrder customerOrder) {
+        List<OrderStatus> orderStatuses = new ArrayList<>();
+        for (Status status: customerOrder.getStatus()) {
+            OrderStatus orderStatus = new OrderStatus(status.getStatus().toString(), status.getRemarks(), status.getStatusUpdateDate());
+            orderStatuses.add(orderStatus);
+        }
+        return orderStatuses;
     }
 }
