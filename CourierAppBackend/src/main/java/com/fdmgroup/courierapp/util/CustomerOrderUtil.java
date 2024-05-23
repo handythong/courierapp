@@ -1,15 +1,19 @@
 package com.fdmgroup.courierapp.util;
 
+import com.fdmgroup.courierapp.apimodel.OrderDashboardDetails;
 import com.fdmgroup.courierapp.apimodel.OrderDetails;
 import com.fdmgroup.courierapp.apimodel.OrderStatus;
 import com.fdmgroup.courierapp.apimodel.RequestOrder;
 import com.fdmgroup.courierapp.model.*;
 import org.springframework.stereotype.Component;
 
+import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 @Component
 public class CustomerOrderUtil {
@@ -86,4 +90,33 @@ public class CustomerOrderUtil {
         }
         return orderStatuses;
     }
+    
+	public OrderDashboardDetails convertOrderDetails(CustomerOrder customerOrder) {
+		OrderDashboardDetails odb = new OrderDashboardDetails();
+		
+		odb.setOrderId(customerOrder.getId());
+		odb.setToFullName(customerOrder.getRecipient().getFullName());
+		odb.setFromFullName(customerOrder.getSender().getFullName());
+		odb.setToAddress(customerOrder.getRecipient().getDeliveryAddress());
+		
+		String currentStatus = customerOrder.getStatus().stream()
+				.max(Comparator.comparing(Status::getStatusUpdateDate))
+				.map(Status::getStatus)
+				.map(Enum::toString)
+				.orElse("");
+
+		odb.setCurrentStatus(currentStatus.toString());
+		
+		odb.setOrderDate(customerOrder.getOrderDate()
+						.toInstant()
+						.atZone(ZoneId.systemDefault())
+						.toLocalDate());
+		
+		odb.setDeliveryDate(customerOrder.getDeliveryDate()
+				.toInstant()
+				.atZone(ZoneId.systemDefault())
+				.toLocalDate());
+		
+		return odb;
+	}
 }
