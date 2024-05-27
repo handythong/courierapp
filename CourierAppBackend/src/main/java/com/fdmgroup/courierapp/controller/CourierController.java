@@ -6,7 +6,6 @@ import com.fdmgroup.courierapp.exception.OrderNotFoundException;
 import com.fdmgroup.courierapp.model.Courier;
 import com.fdmgroup.courierapp.model.CustomerOrder;
 import com.fdmgroup.courierapp.model.Status;
-import com.fdmgroup.courierapp.model.StatusEnum;
 import com.fdmgroup.courierapp.service.CourierService;
 import com.fdmgroup.courierapp.service.CustomerOrderService;
 import com.fdmgroup.courierapp.service.StatusService;
@@ -17,7 +16,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -49,7 +47,7 @@ public class CourierController {
         List<CustomerOrder> customerOrders = customerOrderService.getOrderHistoryByCourierId(courier.getAccountId());
         //List<OrderDetails> orderDetailsList = customerOrders.stream().map(customerOrder -> customerOrderUtil.generateOrderDetails(customerOrder)).collect(Collectors.toList());
         List<OrderDashboardDetails> orderDetailsList = customerOrders.stream()
-        		.map(customerOrder -> customerOrderUtil.convertOrderDetails(customerOrder))
+        		.map(customerOrder -> customerOrderUtil.generateOrderDashboardDetails(customerOrder))
         		.collect(Collectors.toList());
         
         ResponseOrderHistory responseOrderHistory = new ResponseOrderHistory("Success", "Fetch success", orderDetailsList);
