@@ -20,9 +20,6 @@ public class AccountService {
 	private AccountRepo accountRepo;
 	
 	@Autowired
-	private CustomerService customerService;
-	
-	@Autowired
 	private PasswordEncoder passwordEncoder;
 	
 	private final Logger logger = LogManager.getLogger();
@@ -35,8 +32,7 @@ public class AccountService {
 		newAccount.setPassword(passwordEncoder.encode(newAccount.getPassword()));
 		newAccount.setCreatedOn(new Date());
 		newAccount.setLastUpdated(new Date());
-		Account createdAccount = accountRepo.save(newAccount);
-		return createdAccount;
+        return accountRepo.save(newAccount);
 	}
 
 	public Boolean isDuplicateUsername(String username) {
