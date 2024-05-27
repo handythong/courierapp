@@ -5,6 +5,7 @@ import com.fdmgroup.courierapp.apimodel.OrderDetails;
 import com.fdmgroup.courierapp.apimodel.ResponseOrderHistory;
 import com.fdmgroup.courierapp.model.Customer;
 import com.fdmgroup.courierapp.model.CustomerOrder;
+import com.fdmgroup.courierapp.model.StatusEnum;
 import com.fdmgroup.courierapp.service.CustomerOrderService;
 import com.fdmgroup.courierapp.service.CustomerService;
 import com.fdmgroup.courierapp.util.CustomerOrderUtil;
@@ -13,6 +14,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -45,4 +47,10 @@ public class CustomerController {
         ResponseOrderHistory responseOrderHistory = new ResponseOrderHistory("Success", "Fetch success", orderDetailsList);
         return new ResponseEntity<>(responseOrderHistory, HttpStatus.OK);
     }
+
+
+//    StatusEnum currentStatus = customerOrder.getStatus().stream()
+//            .max(Comparator.comparing(status -> status.getStatusUpdateDate()))
+//            .get()
+//            .getStatus();
 }

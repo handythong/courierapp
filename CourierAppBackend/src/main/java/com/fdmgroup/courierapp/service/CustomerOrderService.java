@@ -16,7 +16,7 @@ public class CustomerOrderService {
 	@Autowired
 	CustomerOrderRepo customerOrderRepo;
 
-	public CustomerOrder findByCustomerOrderId(Long customerOrderId) throws Exception {
+	public CustomerOrder findByCustomerOrderId(Long customerOrderId) throws OrderNotFoundException {
 		Optional<CustomerOrder> optCustomerOrder = customerOrderRepo.findById(customerOrderId);
 		if (optCustomerOrder.isPresent()) {
 			return optCustomerOrder.get();
