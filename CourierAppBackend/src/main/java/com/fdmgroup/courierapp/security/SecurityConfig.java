@@ -33,7 +33,8 @@ public class SecurityConfig {
                                 .permitAll()
                                 .requestMatchers("/orders/create-order", "/customer/**").hasRole("CUSTOMER")
                                 .requestMatchers("/courier/**").hasRole("COURIER")
-                                .anyRequest().authenticated());
+                                .anyRequest().authenticated())
+                .logout(logout -> logout.logoutUrl("/default-logout"));
         return http.build();
     }
 }

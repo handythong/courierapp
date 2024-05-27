@@ -1,7 +1,6 @@
 package com.fdmgroup.courierapp.controller;
 
 import com.fdmgroup.courierapp.apimodel.OrderDashboardDetails;
-import com.fdmgroup.courierapp.apimodel.OrderDetails;
 import com.fdmgroup.courierapp.apimodel.ResponseOrderHistory;
 import com.fdmgroup.courierapp.model.Customer;
 import com.fdmgroup.courierapp.model.CustomerOrder;
@@ -39,7 +38,7 @@ public class CustomerController {
         List<CustomerOrder> customerOrders = customerOrderService.getOrderHistoryByCustomerId(customer.getAccountId());
         //List<OrderDetails> orderDetailsList = customerOrders.stream().map(customerOrder -> customerOrderUtil.generateOrderDetails(customerOrder)).collect(Collectors.toList());
         List<OrderDashboardDetails> orderDetailsList = customerOrders.stream()
-        		.map(customerOrder -> customerOrderUtil.convertOrderDetails(customerOrder))
+        		.map(customerOrder -> customerOrderUtil.generateOrderDashboardDetails(customerOrder))
         		.collect(Collectors.toList());
         
         ResponseOrderHistory responseOrderHistory = new ResponseOrderHistory("Success", "Fetch success", orderDetailsList);

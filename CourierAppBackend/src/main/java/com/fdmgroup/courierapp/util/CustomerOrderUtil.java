@@ -13,7 +13,6 @@ import java.util.Calendar;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
-import java.util.Optional;
 
 @Component
 public class CustomerOrderUtil {
@@ -91,7 +90,7 @@ public class CustomerOrderUtil {
         return orderStatuses;
     }
     
-	public OrderDashboardDetails convertOrderDetails(CustomerOrder customerOrder) {
+	public OrderDashboardDetails generateOrderDashboardDetails(CustomerOrder customerOrder) {
 		OrderDashboardDetails odb = new OrderDashboardDetails();
 		
 		odb.setOrderId(customerOrder.getId());
