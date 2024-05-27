@@ -1,15 +1,19 @@
 package com.fdmgroup.courierapp.util;
 
+import com.fdmgroup.courierapp.apimodel.OrderDashboardDetails;
 import com.fdmgroup.courierapp.apimodel.OrderDetails;
+import com.fdmgroup.courierapp.apimodel.OrderStatus;
 import com.fdmgroup.courierapp.apimodel.RequestOrder;
-import com.fdmgroup.courierapp.model.CustomerOrder;
-import com.fdmgroup.courierapp.model.Parcel;
-import com.fdmgroup.courierapp.model.Recipient;
-import com.fdmgroup.courierapp.model.Sender;
+import com.fdmgroup.courierapp.model.*;
 import org.springframework.stereotype.Component;
 
+import java.time.ZoneId;
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Comparator;
 import java.util.Date;
+import java.util.List;
+import java.util.Optional;
 
 @Component
 public class CustomerOrderUtil {
@@ -48,10 +52,18 @@ public class CustomerOrderUtil {
         return calendar.getTime();
     }
 
+    public Status generateOrderCreatedStatus() {
+        Status status = new Status();
+        status.setStatus(StatusEnum.ORDER_CREATED);
+        status.setRemarks("Order Created");
+        status.setStatusUpdateDate(new Date());
+        return status;
+    }
+
     public OrderDetails generateOrderDetails(CustomerOrder customerOrder) {
         OrderDetails newOrderDetails = new OrderDetails();
         newOrderDetails.setOrderId(customerOrder.getId());
-        newOrderDetails.setOrderStatus(customerOrder.getStatus().toString());
+        newOrderDetails.setOrderStatus(mappedOrderStatus(customerOrder));
         newOrderDetails.setDeliveryDate(customerOrder.getDeliveryDate());
         newOrderDetails.setOrderDate(customerOrder.getOrderDate());
         newOrderDetails.setFromAddress(customerOrder.getSender().getPickupAddress());
@@ -69,4 +81,42 @@ public class CustomerOrderUtil {
         newOrderDetails.setParcelDescription(customerOrder.getParcel().getDescription());
         return newOrderDetails;
     }
+
+    public List<OrderStatus> mappedOrderStatus(CustomerOrder customerOrder) {
+        List<OrderStatus> orderStatuses = new ArrayList<>();
+        for (Status status: customerOrder.getStatus()) {
+            OrderStatus orderStatus = new OrderStatus(status.getStatus().toString(), status.getRemarks(), status.getStatusUpdateDate());
+            orderStatuses.add(orderStatus);
+        }
+        return orderStatuses;
+    }
+    
+	public OrderDashboardDetails convertOrderDetails(CustomerOrder customerOrder) {
+		OrderDashboardDetails odb = new OrderDashboardDetails();
+		
+		odb.setOrderId(customerOrder.getId());
+		odb.setToFullName(customerOrder.getRecipient().getFullName());
+		odb.setFromFullName(customerOrder.getSender().getFullName());
+		odb.setToAddress(customerOrder.getRecipient().getDeliveryAddress());
+		
+		String currentStatus = customerOrder.getStatus().stream()
+				.max(Comparator.comparing(Status::getStatusUpdateDate))
+				.map(Status::getStatus)
+				.map(Enum::toString)
+				.orElse("");
+
+		odb.setCurrentStatus(currentStatus.toString());
+		
+		odb.setOrderDate(customerOrder.getOrderDate()
+						.toInstant()
+						.atZone(ZoneId.systemDefault())
+						.toLocalDate());
+		
+		odb.setDeliveryDate(customerOrder.getDeliveryDate()
+				.toInstant()
+				.atZone(ZoneId.systemDefault())
+				.toLocalDate());
+		
+		return odb;
+	}
 }

@@ -1,5 +1,6 @@
 package com.fdmgroup.courierapp.controller;
 
+import com.fdmgroup.courierapp.apimodel.OrderDashboardDetails;
 import com.fdmgroup.courierapp.apimodel.OrderDetails;
 import com.fdmgroup.courierapp.apimodel.ResponseOrderHistory;
 import com.fdmgroup.courierapp.model.Courier;
@@ -36,7 +37,11 @@ public class CourierController {
             return new ResponseEntity<>(responseOrderHistory, HttpStatus.OK);
         }
         List<CustomerOrder> customerOrders = customerOrderService.getOrderHistoryByCourierId(courier.getAccountId());
-        List<OrderDetails> orderDetailsList = customerOrders.stream().map(customerOrder -> customerOrderUtil.generateOrderDetails(customerOrder)).collect(Collectors.toList());
+        //List<OrderDetails> orderDetailsList = customerOrders.stream().map(customerOrder -> customerOrderUtil.generateOrderDetails(customerOrder)).collect(Collectors.toList());
+        List<OrderDashboardDetails> orderDetailsList = customerOrders.stream()
+        		.map(customerOrder -> customerOrderUtil.convertOrderDetails(customerOrder))
+        		.collect(Collectors.toList());
+        
         ResponseOrderHistory responseOrderHistory = new ResponseOrderHistory("Success", "Fetch success", orderDetailsList);
         return new ResponseEntity<>(responseOrderHistory, HttpStatus.OK);
     }

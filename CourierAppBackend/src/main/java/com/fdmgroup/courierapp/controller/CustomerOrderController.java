@@ -1,6 +1,5 @@
 package com.fdmgroup.courierapp.controller;
 
-import com.fdmgroup.courierapp.apimodel.BaseHeader;
 import com.fdmgroup.courierapp.apimodel.OrderDetails;
 import com.fdmgroup.courierapp.apimodel.RequestOrder;
 import com.fdmgroup.courierapp.apimodel.ResponseOrder;
@@ -10,7 +9,6 @@ import com.fdmgroup.courierapp.util.CustomerOrderUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.parameters.P;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Calendar;
@@ -22,13 +20,9 @@ public class CustomerOrderController {
     @Autowired
     CustomerOrderService customerOrderService;
     @Autowired
-    ParcelService parcelService;
-    @Autowired
-    SenderService senderService;
-    @Autowired
-    RecipientService recipientService;
-    @Autowired
     CustomerService customerService;
+    @Autowired
+    StatusService statusService;
     @Autowired
     CustomerOrderUtil customerOrderUtil;
     
@@ -50,6 +44,7 @@ public class CustomerOrderController {
         } catch (Exception e) {
             return new ResponseEntity<>(new ResponseOrder("Failed", e.getMessage()), HttpStatus.OK);
         }
+        Status orderCreatedStatus = customerOrderUtil.generateOrderCreatedStatus();
         //OrderItem creation
         CustomerOrder newCustomerOrder = new CustomerOrder();
         newCustomerOrder.setOrderDate(new Date());
@@ -59,8 +54,13 @@ public class CustomerOrderController {
         newCustomerOrder.setRecipient(newRecipient);
         newCustomerOrder.setParcel(newParcel);
         newCustomerOrder.setCustomer(customer);
-        newCustomerOrder.setStatus(Status.PROCESSING);
         newCustomerOrder = customerOrderService.createOrder(newCustomerOrder);
+
+        //assign customer order to status and persist it
+        orderCreatedStatus.setCustomerOrder(newCustomerOrder);
+        orderCreatedStatus = statusService.createStatus(orderCreatedStatus);
+        //append generated status to customer order
+        newCustomerOrder.appendStatus(orderCreatedStatus);
 
         OrderDetails orderDetails = customerOrderUtil.generateOrderDetails(newCustomerOrder);
         return new ResponseEntity<ResponseOrder>(new ResponseOrder("Success", "Order Created Successfully", orderDetails), HttpStatus.OK);

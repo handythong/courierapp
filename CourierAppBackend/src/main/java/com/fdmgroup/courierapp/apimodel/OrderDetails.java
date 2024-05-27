@@ -1,10 +1,11 @@
 package com.fdmgroup.courierapp.apimodel;
 
 import java.util.Date;
+import java.util.List;
 
 public class OrderDetails {
     private long orderId;
-    private String orderStatus;
+    private List<OrderStatus> orderStatus;
     private Date deliveryDate;
     private Date orderDate;
     //OrderRecipient field
@@ -35,11 +36,11 @@ public class OrderDetails {
         this.orderId = orderId;
     }
 
-    public String getOrderStatus() {
+    public List<OrderStatus> getOrderStatus() {
         return orderStatus;
     }
 
-    public void setOrderStatus(String orderStatus) {
+    public void setOrderStatus(List<OrderStatus> orderStatus) {
         this.orderStatus = orderStatus;
     }
 

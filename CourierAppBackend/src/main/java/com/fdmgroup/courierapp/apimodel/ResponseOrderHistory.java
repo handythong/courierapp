@@ -5,7 +5,7 @@ import java.util.List;
 public class ResponseOrderHistory {
     private String status;
     private String message;
-    private List<OrderDetails> orderHistoryList;
+    private List<OrderDashboardDetails> orderHistoryList;
 
     public ResponseOrderHistory() {
     }
@@ -15,7 +15,7 @@ public class ResponseOrderHistory {
         this.message = message;
     }
 
-    public ResponseOrderHistory(String status, String message, List<OrderDetails> orderHistoryList) {
+    public ResponseOrderHistory(String status, String message, List<OrderDashboardDetails> orderHistoryList) {
         this.status = status;
         this.message = message;
         this.orderHistoryList = orderHistoryList;
@@ -37,11 +37,11 @@ public class ResponseOrderHistory {
         this.message = message;
     }
 
-    public List<OrderDetails> getOrderHistoryList() {
+    public List<OrderDashboardDetails> getOrderHistoryList() {
         return orderHistoryList;
     }
 
-    public void setOrderHistoryList(List<OrderDetails> orderHistoryList) {
+    public void setOrderHistoryList(List<OrderDashboardDetails> orderHistoryList) {
         this.orderHistoryList = orderHistoryList;
     }
 }
