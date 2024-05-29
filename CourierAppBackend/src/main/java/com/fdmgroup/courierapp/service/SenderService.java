@@ -14,5 +14,10 @@ public class SenderService {
 	public Sender createSender(Sender newSender) {
 		return senderRepo.save(newSender);
 	}
-	
+
+	public Sender replaceSender(Long outdatedSenderId, Sender updatedSender) {
+		senderRepo.deleteById(outdatedSenderId);
+		senderRepo.save(updatedSender);
+		return updatedSender;
+	}
 }
