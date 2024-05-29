@@ -1,23 +1,19 @@
 package com.fdmgroup.courierapp.service;
 
-
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.when;
+import static org.mockito.ArgumentMatchers.any;
 import com.fdmgroup.courierapp.exception.PasswordRuleException;
 import com.fdmgroup.courierapp.model.Account;
 import com.fdmgroup.courierapp.repository.AccountRepo;
 import org.junit.jupiter.api.AfterEach;
-import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import static org.mockito.Mockito.when;
-import static org.mockito.ArgumentMatchers.any;
-
 import java.util.Date;
 import java.util.Optional;
 

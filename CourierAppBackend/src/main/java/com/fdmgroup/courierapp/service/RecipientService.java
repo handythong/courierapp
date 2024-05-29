@@ -14,5 +14,10 @@ public class RecipientService {
 	public Recipient createRecipient(Recipient newRecipient) {
 		return recipientRepo.save(newRecipient);
 	}
-	
+
+	public Recipient replaceRecipient(Long outdatedRecipientId, Recipient updatedRecipient) {
+		recipientRepo.deleteById(outdatedRecipientId);
+		recipientRepo.save(updatedRecipient);
+		return updatedRecipient;
+	}
 }
