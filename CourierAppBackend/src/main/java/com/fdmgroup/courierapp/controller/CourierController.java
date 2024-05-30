@@ -6,6 +6,7 @@ import com.fdmgroup.courierapp.exception.OrderNotFoundException;
 import com.fdmgroup.courierapp.model.Courier;
 import com.fdmgroup.courierapp.model.CustomerOrder;
 import com.fdmgroup.courierapp.model.Status;
+import com.fdmgroup.courierapp.model.StatusEnum;
 import com.fdmgroup.courierapp.service.CourierService;
 import com.fdmgroup.courierapp.service.CustomerOrderService;
 import com.fdmgroup.courierapp.service.StatusService;
@@ -16,6 +17,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -74,10 +76,17 @@ public class CourierController {
             return new ResponseEntity<>(responseOrder, HttpStatus.OK);
         }
         Status status = statusUtil.statusMapper(orderStatus.getStatus());
-        status.setCustomerOrder(customerOrder);
-        status.setRemarks(orderStatus.getRemarks());
-        status.setStatusUpdateDate(new Date());
-        status = statusService.createStatus(status);
+
+        StatusEnum[] courierStatusList = {StatusEnum.PICKED_UP, StatusEnum.SORTING, StatusEnum.DELIVERING, StatusEnum.DELIVERED};
+        if (Arrays.asList(courierStatusList).contains(status.getStatus())) {
+            status.setCustomerOrder(customerOrder);
+            status.setRemarks(orderStatus.getRemarks());
+            status.setStatusUpdateDate(new Date());
+            status = statusService.createStatus(status);
+        } else {
+            ResponseOrder responseOrder = new ResponseOrder("Failed", "Updated status is blocked for courier");
+            return new ResponseEntity<>(responseOrder, HttpStatus.OK);
+        }
 
         customerOrder.appendStatus(status);
         ResponseOrder responseOrder = new ResponseOrder("Success", "Status Updated", customerOrderUtil.generateOrderDetails(customerOrder));
