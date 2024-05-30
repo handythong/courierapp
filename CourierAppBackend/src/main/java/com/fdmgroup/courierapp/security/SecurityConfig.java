@@ -31,8 +31,8 @@ public class SecurityConfig {
                 .authorizeHttpRequests(
                         authorize -> authorize.requestMatchers("/login", "/logout", "/register", "/registerCourier", "/track/**")
                                 .permitAll()
-                                .requestMatchers("/orders/create-order", "/customer/**").hasRole("CUSTOMER")
-                                .requestMatchers("/courier/**").hasRole("COURIER")
+                                .requestMatchers("/orders/create-order", "/customer/**").hasAnyRole("CUSTOMER", "ADMIN")
+                                .requestMatchers("/courier/**").hasAnyRole("COURIER", "ADMIN")
                                 .anyRequest().authenticated())
                 .logout(logout -> logout.logoutUrl("/default-logout"));
         return http.build();
