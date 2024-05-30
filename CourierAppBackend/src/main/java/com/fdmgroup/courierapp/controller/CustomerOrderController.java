@@ -11,8 +11,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 
 @RestController
 @CrossOrigin(origins = "http://localhost:3000")
@@ -37,8 +37,7 @@ public class CustomerOrderController {
             return new ResponseEntity<ResponseOrder>(new ResponseOrder("Failed", "Parcel detail input is invalid"), HttpStatus.OK);
         }
 
-        Sender newSender = customerOrderUtil.generateOrderSender(requestOrder);
-        Recipient newRecipient = customerOrderUtil.generateOrderRecipient(requestOrder);
+        List<Party> parties = customerOrderUtil.generateOrderParty(requestOrder);
         try {
             customer = customerService.findByUsername(username);
         } catch (Exception e) {
@@ -50,8 +49,7 @@ public class CustomerOrderController {
         newCustomerOrder.setOrderDate(new Date());
         newCustomerOrder.setLastUpdated(new Date());
         newCustomerOrder.setDeliveryDate(customerOrderUtil.generateDeliveryDate());
-        newCustomerOrder.setSender(newSender);
-        newCustomerOrder.setRecipient(newRecipient);
+        newCustomerOrder.setParty(parties);
         newCustomerOrder.setParcel(newParcel);
         newCustomerOrder.setCustomer(customer);
         newCustomerOrder = customerOrderService.createOrder(newCustomerOrder);
@@ -63,7 +61,7 @@ public class CustomerOrderController {
         newCustomerOrder.appendStatus(orderCreatedStatus);
 
         OrderDetails orderDetails = customerOrderUtil.generateOrderDetails(newCustomerOrder);
-        return new ResponseEntity<ResponseOrder>(new ResponseOrder("Success", "Order Created Successfully", orderDetails), HttpStatus.OK);
+        return new ResponseEntity<>(new ResponseOrder("Success", "Order Created Successfully", orderDetails), HttpStatus.OK);
     }
 
     @GetMapping("/track/{orderId}")
@@ -72,9 +70,9 @@ public class CustomerOrderController {
         try {
             customerOrder = customerOrderService.findByCustomerOrderId(orderId);
             OrderDetails orderDetails = customerOrderUtil.generateOrderDetails(customerOrder);
-            return new ResponseEntity<ResponseOrder>(new ResponseOrder("Success", "Order Retrieved Successfully", orderDetails), HttpStatus.OK);
+            return new ResponseEntity<>(new ResponseOrder("Success", "Order Retrieved Successfully", orderDetails), HttpStatus.OK);
         } catch (Exception e) {
-            return new ResponseEntity<ResponseOrder>(new ResponseOrder("Failed", "Order ID not found in database", null), HttpStatus.OK);
+            return new ResponseEntity<>(new ResponseOrder("Failed", "Order ID not found in database", null), HttpStatus.OK);
         }
     }
 

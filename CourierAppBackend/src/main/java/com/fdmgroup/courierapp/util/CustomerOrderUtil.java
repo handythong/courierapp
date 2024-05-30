@@ -26,22 +26,24 @@ public class CustomerOrderUtil {
         return newParcel;
     }
 
-    public Sender generateOrderSender(RequestOrder requestOrder) {
-        Sender newSender = new Sender();
-        newSender.setEmail(requestOrder.getFromEmail());
-        newSender.setPhoneNo(requestOrder.getFromPhone());
-        newSender.setFullName(requestOrder.getFromFullName());
-        newSender.setPickupAddress(requestOrder.getFromAddress());
-        return newSender;
-    }
+    public List<Party> generateOrderParty(RequestOrder requestOrder) {
+        List<Party> parties = new ArrayList<>();
+        Party recipient = new Party();
+        recipient.setEmail(requestOrder.getToEmail());
+        recipient.setPhoneNo(requestOrder.getToPhone());
+        recipient.setFullName(requestOrder.getToFullName());
+        recipient.setAddress(requestOrder.getToAddress());
+        recipient.setPartyType(PartyEnum.RECIPIENT);
 
-    public Recipient generateOrderRecipient(RequestOrder requestOrder) {
-        Recipient newRecipient = new Recipient();
-        newRecipient.setEmail(requestOrder.getToEmail());
-        newRecipient.setPhoneNo(requestOrder.getToPhone());
-        newRecipient.setFullName(requestOrder.getToFullName());
-        newRecipient.setDeliveryAddress(requestOrder.getToAddress());
-        return newRecipient;
+        Party sender = new Party();
+        sender.setEmail(requestOrder.getFromEmail());
+        sender.setPhoneNo(requestOrder.getFromPhone());
+        sender.setFullName(requestOrder.getFromFullName());
+        sender.setAddress(requestOrder.getFromAddress());
+        sender.setPartyType(PartyEnum.SENDER);
+        parties.add(recipient);
+        parties.add(sender);
+        return parties;
     }
 
     public Date generateDeliveryDate() {
@@ -61,18 +63,26 @@ public class CustomerOrderUtil {
 
     public OrderDetails generateOrderDetails(CustomerOrder customerOrder) {
         OrderDetails newOrderDetails = new OrderDetails();
+        Party recipient = customerOrder.getParty().stream()
+                .filter(party -> party.getPartyType().equals(PartyEnum.RECIPIENT))
+                .findFirst()
+                .orElse(null);
+        Party sender = customerOrder.getParty().stream()
+                .filter(party -> party.getPartyType().equals(PartyEnum.SENDER))
+                .findFirst()
+                .orElse(null);
         newOrderDetails.setOrderId(customerOrder.getId());
         newOrderDetails.setOrderStatus(mappedOrderStatus(customerOrder));
         newOrderDetails.setDeliveryDate(customerOrder.getDeliveryDate());
         newOrderDetails.setOrderDate(customerOrder.getOrderDate());
-        newOrderDetails.setFromAddress(customerOrder.getSender().getPickupAddress());
-        newOrderDetails.setFromFullName(customerOrder.getSender().getFullName());
-        newOrderDetails.setFromEmail(customerOrder.getSender().getEmail());
-        newOrderDetails.setFromPhoneNo(customerOrder.getSender().getPhoneNo());
-        newOrderDetails.setToAddress(customerOrder.getRecipient().getDeliveryAddress());
-        newOrderDetails.setToFullName(customerOrder.getRecipient().getFullName());
-        newOrderDetails.setToEmail(customerOrder.getRecipient().getEmail());
-        newOrderDetails.setToPhoneNo(customerOrder.getRecipient().getPhoneNo());
+        newOrderDetails.setFromAddress(sender.getAddress());
+        newOrderDetails.setFromFullName(sender.getFullName());
+        newOrderDetails.setFromEmail(sender.getEmail());
+        newOrderDetails.setFromPhoneNo(sender.getPhoneNo());
+        newOrderDetails.setToAddress(recipient.getAddress());
+        newOrderDetails.setToFullName(recipient.getFullName());
+        newOrderDetails.setToEmail(recipient.getEmail());
+        newOrderDetails.setToPhoneNo(recipient.getPhoneNo());
         newOrderDetails.setWeight(customerOrder.getParcel().getWeight());
         newOrderDetails.setWidth(customerOrder.getParcel().getWidth());
         newOrderDetails.setHeight(customerOrder.getParcel().getHeight());
@@ -92,11 +102,18 @@ public class CustomerOrderUtil {
     
 	public OrderDashboardDetails generateOrderDashboardDetails(CustomerOrder customerOrder) {
 		OrderDashboardDetails odb = new OrderDashboardDetails();
-		
+        Party recipient = customerOrder.getParty().stream()
+                .filter(party -> party.getPartyType().equals(PartyEnum.RECIPIENT))
+                .findFirst()
+                .orElse(null);
+        Party sender = customerOrder.getParty().stream()
+                .filter(party -> party.getPartyType().equals(PartyEnum.SENDER))
+                .findFirst()
+                .orElse(null);
 		odb.setOrderId(customerOrder.getId());
-		odb.setToFullName(customerOrder.getRecipient().getFullName());
-		odb.setFromFullName(customerOrder.getSender().getFullName());
-		odb.setToAddress(customerOrder.getRecipient().getDeliveryAddress());
+		odb.setToFullName(recipient.getFullName());
+		odb.setFromFullName(sender.getFullName());
+		odb.setToAddress(recipient.getAddress());
 		
 		String currentStatus = customerOrder.getStatus().stream()
 				.max(Comparator.comparing(Status::getStatusUpdateDate))

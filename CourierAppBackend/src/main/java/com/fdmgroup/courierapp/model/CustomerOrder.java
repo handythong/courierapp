@@ -25,12 +25,8 @@ public class CustomerOrder {
 	@OneToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name = "parcel_id")
 	private Parcel parcel;
-	@OneToOne(cascade = CascadeType.ALL)
-	@JoinColumn(name = "sender_id")
-	private Sender sender;
-	@OneToOne(cascade = CascadeType.ALL)
-	@JoinColumn(name = "recipient_id")
-	private Recipient recipient;
+	@OneToMany(cascade = CascadeType.ALL)
+	private List<Party> party = new ArrayList<>();
 	@ManyToOne
 	@JoinColumn(name = "customer_id")
 	private Customer customer;
@@ -38,7 +34,7 @@ public class CustomerOrder {
 	public CustomerOrder() {
 	}
 
-	public CustomerOrder(long id, Date deliveryDate, Date orderDate, Date lastUpdated, List<Status> status, Courier courier, Parcel parcel, Sender sender, Recipient recipient, Customer customer) {
+	public CustomerOrder(long id, Date deliveryDate, Date orderDate, Date lastUpdated, List<Status> status, Courier courier, Parcel parcel, List<Party> party, Customer customer) {
 		this.id = id;
 		this.deliveryDate = deliveryDate;
 		this.orderDate = orderDate;
@@ -46,8 +42,7 @@ public class CustomerOrder {
 		this.status = status;
 		this.courier = courier;
 		this.parcel = parcel;
-		this.sender = sender;
-		this.recipient = recipient;
+		this.party = party;
 		this.customer = customer;
 	}
 
@@ -107,20 +102,12 @@ public class CustomerOrder {
 		this.parcel = parcel;
 	}
 
-	public Sender getSender() {
-		return sender;
+	public List<Party> getParty() {
+		return party;
 	}
 
-	public void setSender(Sender sender) {
-		this.sender = sender;
-	}
-
-	public Recipient getRecipient() {
-		return recipient;
-	}
-
-	public void setRecipient(Recipient recipient) {
-		this.recipient = recipient;
+	public void setParty(List<Party> party) {
+		this.party = party;
 	}
 
 	public Customer getCustomer() {

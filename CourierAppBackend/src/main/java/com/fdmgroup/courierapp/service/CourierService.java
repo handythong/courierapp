@@ -27,7 +27,7 @@ public class CourierService {
 		if (optCourier.isPresent()) {
 			return optCourier.get();
 		} else {
-			throw new CourierNotFoundException("Customer not found");
+			throw new CourierNotFoundException("Courier not found");
 		}
 	}
 }
