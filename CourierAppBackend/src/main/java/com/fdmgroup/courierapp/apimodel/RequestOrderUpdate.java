@@ -50,7 +50,8 @@ public class RequestOrderUpdate {
         return recipient.getToFullName() != null && !recipient.getToFullName().trim().isEmpty() &&
                 recipient.getToEmail() != null && !recipient.getToEmail().trim().isEmpty() &&
                 recipient.getToPhone() != null && !recipient.getToPhone().trim().isEmpty() &&
-                recipient.getToAddress() != null && !recipient.getToAddress().trim().isEmpty();
+                recipient.getToAddress() != null && !recipient.getToAddress().getAddress().trim().isEmpty()
+                && !recipient.getToAddress().getPostalCode().trim().isEmpty();
     }
 
     private boolean isSenderValid() {
@@ -60,6 +61,7 @@ public class RequestOrderUpdate {
         return sender.getFromFullName() != null && !sender.getFromFullName().trim().isEmpty() &&
                 sender.getFromEmail() != null && !sender.getFromEmail().trim().isEmpty() &&
                 sender.getFromPhone() != null && !sender.getFromPhone().trim().isEmpty() &&
-                sender.getFromAddress() != null && !sender.getFromAddress().trim().isEmpty();
+                sender.getFromAddress() != null && !sender.getFromAddress().getAddress().trim().isEmpty()
+                && !sender.getFromAddress().getPostalCode().trim().isEmpty();
     }
 }

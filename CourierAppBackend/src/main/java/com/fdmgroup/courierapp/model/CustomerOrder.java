@@ -46,6 +46,13 @@ public class CustomerOrder {
 		this.customer = customer;
 	}
 
+	public void replaceParty(Party sender, Party recipient) {
+		List<Party> newParty = new ArrayList<>();
+		newParty.add(sender);
+		newParty.add(recipient);
+		this.party = newParty;
+	}
+
 	public long getId() {
 		return id;
 	}

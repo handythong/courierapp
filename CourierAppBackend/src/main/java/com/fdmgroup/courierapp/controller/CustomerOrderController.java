@@ -52,7 +52,7 @@ public class CustomerOrderController {
         newCustomerOrder.setParty(parties);
         newCustomerOrder.setParcel(newParcel);
         newCustomerOrder.setCustomer(customer);
-        newCustomerOrder = customerOrderService.createOrder(newCustomerOrder);
+        newCustomerOrder = customerOrderService.saveOrder(newCustomerOrder);
 
         //assign customer order to status and persist it
         orderCreatedStatus.setCustomerOrder(newCustomerOrder);
