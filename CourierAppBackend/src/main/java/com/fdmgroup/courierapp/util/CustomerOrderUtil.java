@@ -63,11 +63,11 @@ public class CustomerOrderUtil {
 
     public OrderDetails generateOrderDetails(CustomerOrder customerOrder) {
         OrderDetails newOrderDetails = new OrderDetails();
-        Party recipient = customerOrder.getParty().stream()
+        Party recipient = customerOrder.getParties().stream()
                 .filter(party -> party.getPartyType().equals(PartyEnum.RECIPIENT))
                 .findFirst()
                 .orElse(null);
-        Party sender = customerOrder.getParty().stream()
+        Party sender = customerOrder.getParties().stream()
                 .filter(party -> party.getPartyType().equals(PartyEnum.SENDER))
                 .findFirst()
                 .orElse(null);
@@ -93,7 +93,7 @@ public class CustomerOrderUtil {
 
     public List<OrderStatus> mappedOrderStatus(CustomerOrder customerOrder) {
         List<OrderStatus> orderStatuses = new ArrayList<>();
-        for (Status status: customerOrder.getStatus()) {
+        for (Status status: customerOrder.getStatuses()) {
             OrderStatus orderStatus = new OrderStatus(status.getStatus().toString(), status.getRemarks(), status.getStatusUpdateDate());
             orderStatuses.add(orderStatus);
         }
@@ -102,11 +102,11 @@ public class CustomerOrderUtil {
     
 	public OrderDashboardDetails generateOrderDashboardDetails(CustomerOrder customerOrder) {
 		OrderDashboardDetails odb = new OrderDashboardDetails();
-        Party recipient = customerOrder.getParty().stream()
+        Party recipient = customerOrder.getParties().stream()
                 .filter(party -> party.getPartyType().equals(PartyEnum.RECIPIENT))
                 .findFirst()
                 .orElse(null);
-        Party sender = customerOrder.getParty().stream()
+        Party sender = customerOrder.getParties().stream()
                 .filter(party -> party.getPartyType().equals(PartyEnum.SENDER))
                 .findFirst()
                 .orElse(null);
@@ -115,7 +115,7 @@ public class CustomerOrderUtil {
 		odb.setFromFullName(sender.getFullName());
 		odb.setToAddress(recipient.getAddress());
 		
-		String currentStatus = customerOrder.getStatus().stream()
+		String currentStatus = customerOrder.getStatuses().stream()
 				.max(Comparator.comparing(Status::getStatusUpdateDate))
 				.map(Status::getStatus)
 				.map(Enum::toString)

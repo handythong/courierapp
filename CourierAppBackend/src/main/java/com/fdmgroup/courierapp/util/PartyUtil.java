@@ -20,7 +20,7 @@ public class PartyUtil {
 
     public Party mapRecipient(Recipient recipient, CustomerOrder customerOrder) {
 
-        Party partyRecipient = customerOrder.getParty().stream()
+        Party partyRecipient = customerOrder.getParties().stream()
                 .filter(party -> party.getPartyType().equals(PartyEnum.RECIPIENT))
                 .findFirst().orElseGet(null);
 //        Party partyRecipient = partyService.findById(recipientId);
@@ -36,7 +36,7 @@ public class PartyUtil {
     }
 
     public Party mapSender(Sender sender, CustomerOrder customerOrder) {
-        Party partySender = customerOrder.getParty().stream()
+        Party partySender = customerOrder.getParties().stream()
                 .filter(party -> party.getPartyType().equals(PartyEnum.SENDER))
                 .findFirst().orElseGet(null);
 //        Party partySender = partyService.findById(senderId);

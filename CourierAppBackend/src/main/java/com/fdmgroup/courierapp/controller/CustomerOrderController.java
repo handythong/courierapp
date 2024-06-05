@@ -3,6 +3,7 @@ package com.fdmgroup.courierapp.controller;
 import com.fdmgroup.courierapp.apimodel.OrderDetails;
 import com.fdmgroup.courierapp.apimodel.RequestOrder;
 import com.fdmgroup.courierapp.apimodel.ResponseOrder;
+import com.fdmgroup.courierapp.exception.OrderNotFoundException;
 import com.fdmgroup.courierapp.model.*;
 import com.fdmgroup.courierapp.service.*;
 import com.fdmgroup.courierapp.util.CustomerOrderUtil;
@@ -49,7 +50,7 @@ public class CustomerOrderController {
         newCustomerOrder.setOrderDate(new Date());
         newCustomerOrder.setLastUpdated(new Date());
         newCustomerOrder.setDeliveryDate(customerOrderUtil.generateDeliveryDate());
-        newCustomerOrder.setParty(parties);
+        newCustomerOrder.setParties(parties);
         newCustomerOrder.setParcel(newParcel);
         newCustomerOrder.setCustomer(customer);
         newCustomerOrder = customerOrderService.saveOrder(newCustomerOrder);
@@ -65,14 +66,14 @@ public class CustomerOrderController {
     }
 
     @GetMapping("/track/{orderId}")
-    public ResponseEntity<ResponseOrder> retrieveOrderId(@PathVariable("orderId") Long orderId) throws Exception {
+    public ResponseEntity<ResponseOrder> retrieveOrderId(@PathVariable("orderId") Long orderId) {
         CustomerOrder customerOrder;
         try {
             customerOrder = customerOrderService.findByCustomerOrderId(orderId);
             OrderDetails orderDetails = customerOrderUtil.generateOrderDetails(customerOrder);
             return new ResponseEntity<>(new ResponseOrder("Success", "Order Retrieved Successfully", orderDetails), HttpStatus.OK);
-        } catch (Exception e) {
-            return new ResponseEntity<>(new ResponseOrder("Failed", "Order ID not found in database", null), HttpStatus.OK);
+        } catch (OrderNotFoundException e) {
+            return new ResponseEntity<>(new ResponseOrder("Failed", e.getMessage(), null), HttpStatus.OK);
         }
     }
 

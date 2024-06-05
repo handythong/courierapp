@@ -18,15 +18,14 @@ public class CustomerOrder {
 	private Date lastUpdated;
 
 	@OneToMany(mappedBy = "customerOrder", cascade = CascadeType.ALL)
-	private List<Status> status = new ArrayList<>();
-	@ManyToOne
-	@JoinColumn(name = "courier_id")
-	private Courier courier;
+	private List<Status> statuses = new ArrayList<>();
+	@OneToMany(mappedBy = "customerOrder", cascade = CascadeType.ALL)
+	private List<Trip> trips = new ArrayList<>();
 	@OneToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name = "parcel_id")
 	private Parcel parcel;
 	@OneToMany(cascade = CascadeType.ALL)
-	private List<Party> party = new ArrayList<>();
+	private List<Party> parties = new ArrayList<>();
 	@ManyToOne
 	@JoinColumn(name = "customer_id")
 	private Customer customer;
@@ -34,23 +33,16 @@ public class CustomerOrder {
 	public CustomerOrder() {
 	}
 
-	public CustomerOrder(long id, Date deliveryDate, Date orderDate, Date lastUpdated, List<Status> status, Courier courier, Parcel parcel, List<Party> party, Customer customer) {
+	public CustomerOrder(long id, Date deliveryDate, Date orderDate, Date lastUpdated, List<Status> statuses, List<Trip> trips, Parcel parcel, List<Party> parties, Customer customer) {
 		this.id = id;
 		this.deliveryDate = deliveryDate;
 		this.orderDate = orderDate;
 		this.lastUpdated = lastUpdated;
-		this.status = status;
-		this.courier = courier;
+		this.statuses = statuses;
+		this.trips = trips;
 		this.parcel = parcel;
-		this.party = party;
+		this.parties = parties;
 		this.customer = customer;
-	}
-
-	public void replaceParty(Party sender, Party recipient) {
-		List<Party> newParty = new ArrayList<>();
-		newParty.add(sender);
-		newParty.add(recipient);
-		this.party = newParty;
 	}
 
 	public long getId() {
@@ -85,20 +77,20 @@ public class CustomerOrder {
 		this.lastUpdated = lastUpdated;
 	}
 
-	public List<Status> getStatus() {
-		return status;
+	public List<Status> getStatuses() {
+		return statuses;
 	}
 
-	public void setStatus(List<Status> status) {
-		this.status = status;
+	public void setStatuses(List<Status> statuses) {
+		this.statuses = statuses;
 	}
 
-	public Courier getCourier() {
-		return courier;
+	public List<Trip> getTrips() {
+		return trips;
 	}
 
-	public void setCourier(Courier courier) {
-		this.courier = courier;
+	public void setTrips(List<Trip> trips) {
+		this.trips = trips;
 	}
 
 	public Parcel getParcel() {
@@ -109,12 +101,12 @@ public class CustomerOrder {
 		this.parcel = parcel;
 	}
 
-	public List<Party> getParty() {
-		return party;
+	public List<Party> getParties() {
+		return parties;
 	}
 
-	public void setParty(List<Party> party) {
-		this.party = party;
+	public void setParties(List<Party> parties) {
+		this.parties = parties;
 	}
 
 	public Customer getCustomer() {
@@ -126,6 +118,17 @@ public class CustomerOrder {
 	}
 
 	public void appendStatus(Status status) {
-		this.status.add(status);
+		this.statuses.add(status);
+	}
+
+	public void appendTrip(Trip trip) {
+		this.trips.add(trip);
+	}
+
+	public void replaceParty(Party sender, Party recipient) {
+		List<Party> newParties = new ArrayList<>();
+		newParties.add(sender);
+		newParties.add(recipient);
+		this.parties = newParties;
 	}
 }

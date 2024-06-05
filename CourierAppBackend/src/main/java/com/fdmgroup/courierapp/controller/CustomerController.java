@@ -70,9 +70,9 @@ public class CustomerController {
             return new ResponseEntity<>(new ResponseOrderUpdate("Failed", e.getMessage()), HttpStatus.OK);
         }
 
-        int lastIndex = customerOrder.getStatus().size() - 1;
+        int lastIndex = customerOrder.getStatuses().size() - 1;
 
-        if (!customerOrder.getStatus().get(lastIndex).getStatus().equals(StatusEnum.ORDER_CREATED)) {
+        if (!customerOrder.getStatuses().get(lastIndex).getStatus().equals(StatusEnum.ORDER_CREATED)) {
             return new ResponseEntity<>(new ResponseOrderUpdate("Failed", "Not allowed to update order anymore"), HttpStatus.OK);
         } else if (!customerOrder.getCustomer().getAccountId().equals(customer.getAccountId())) {
             return new ResponseEntity<>(new ResponseOrderUpdate("Failed", "Order does not belong to Customer Id " + customer.getAccountId()), HttpStatus.OK);
