@@ -113,6 +113,7 @@ public class CustomerOrderUtil {
 		odb.setOrderId(customerOrder.getId());
 		odb.setToFullName(recipient.getFullName());
 		odb.setFromFullName(sender.getFullName());
+		odb.setFromAddress(sender.getAddress());
 		odb.setToAddress(recipient.getAddress());
 		
 		String currentStatus = customerOrder.getStatus().stream()
