@@ -3,7 +3,9 @@ package com.fdmgroup.courierapp.controller;
 import com.fdmgroup.courierapp.apimodel.OrderDetails;
 import com.fdmgroup.courierapp.apimodel.RequestOrder;
 import com.fdmgroup.courierapp.apimodel.ResponseOrder;
+import com.fdmgroup.courierapp.exception.CustomerNotFoundException;
 import com.fdmgroup.courierapp.exception.OrderNotFoundException;
+import com.fdmgroup.courierapp.exception.WarehouseNotFoundException;
 import com.fdmgroup.courierapp.model.*;
 import com.fdmgroup.courierapp.service.*;
 import com.fdmgroup.courierapp.util.CustomerOrderUtil;
@@ -12,6 +14,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -25,6 +28,12 @@ public class CustomerOrderController {
     @Autowired
     StatusService statusService;
     @Autowired
+    WarehouseService warehouseService;
+    @Autowired
+    PartyService partyService;
+    @Autowired
+    TripService tripService;
+    @Autowired
     CustomerOrderUtil customerOrderUtil;
     
     @PostMapping("/orders/create-order")
@@ -35,32 +44,44 @@ public class CustomerOrderController {
         try {
             newParcel = customerOrderUtil.generateParcel(requestOrder);
         } catch (Exception e) {
-            return new ResponseEntity<ResponseOrder>(new ResponseOrder("Failed", "Parcel detail input is invalid"), HttpStatus.OK);
+            return new ResponseEntity<>(new ResponseOrder("Failed", "Parcel detail input is invalid"), HttpStatus.OK);
         }
 
-        List<Party> parties = customerOrderUtil.generateOrderParty(requestOrder);
+        Party recipient = customerOrderUtil.generateOrderRecipient(requestOrder);
+        Party sender = customerOrderUtil.generateOrderSender(requestOrder);
         try {
             customer = customerService.findByUsername(username);
-        } catch (Exception e) {
+        } catch (CustomerNotFoundException e) {
             return new ResponseEntity<>(new ResponseOrder("Failed", e.getMessage()), HttpStatus.OK);
         }
         Status orderCreatedStatus = customerOrderUtil.generateOrderCreatedStatus();
+
+        Trip pickupTrip = customerOrderUtil.generatePickupTrip();
+        try {
+            pickupTrip.setWarehouse(warehouseService.findById(1L));
+        } catch (WarehouseNotFoundException e) {
+            return new ResponseEntity<>(new ResponseOrder("Failed", e.getMessage()), HttpStatus.OK);
+        }
         //OrderItem creation
         CustomerOrder newCustomerOrder = new CustomerOrder();
         newCustomerOrder.setOrderDate(new Date());
         newCustomerOrder.setLastUpdated(new Date());
         newCustomerOrder.setDeliveryDate(customerOrderUtil.generateDeliveryDate());
-        newCustomerOrder.setParties(parties);
         newCustomerOrder.setParcel(newParcel);
         newCustomerOrder.setCustomer(customer);
-        newCustomerOrder = customerOrderService.saveOrder(newCustomerOrder);
 
-        //assign customer order to status and persist it
         orderCreatedStatus.setCustomerOrder(newCustomerOrder);
-        orderCreatedStatus = statusService.createStatus(orderCreatedStatus);
-        //append generated status to customer order
-        newCustomerOrder.appendStatus(orderCreatedStatus);
+        newCustomerOrder.getStatuses().add(orderCreatedStatus);
 
+        recipient.setCustomerOrder(newCustomerOrder);
+        sender.setCustomerOrder(newCustomerOrder);
+        newCustomerOrder.getParties().add(recipient);
+        newCustomerOrder.getParties().add(sender);
+
+        pickupTrip.setCustomerOrder(newCustomerOrder);
+        newCustomerOrder.getTrips().add(pickupTrip);
+
+        newCustomerOrder = customerOrderService.saveOrder(newCustomerOrder);
         OrderDetails orderDetails = customerOrderUtil.generateOrderDetails(newCustomerOrder);
         return new ResponseEntity<>(new ResponseOrder("Success", "Order Created Successfully", orderDetails), HttpStatus.OK);
     }

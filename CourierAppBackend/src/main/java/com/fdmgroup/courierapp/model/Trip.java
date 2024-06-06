@@ -13,16 +13,17 @@ public class Trip {
     private long id;
 
     private Date tripDate;
+    @Enumerated(EnumType.STRING)
     private RouteEnum route;
+    @Enumerated(EnumType.STRING)
+    private TripStatusEnum tripStatus;
 
     @ManyToOne
     @JoinColumn(name = "customer_order_id")
     private CustomerOrder customerOrder;
-
     @ManyToOne
     @JoinColumn(name = "courier_id")
     private Courier courier;
-
     @ManyToOne
     @JoinColumn(name = "warehouse_id")
     private Warehouse warehouse;
@@ -30,10 +31,11 @@ public class Trip {
     public Trip() {
     }
 
-    public Trip(long id, Date tripDate, RouteEnum route, CustomerOrder customerOrder, Courier courier, Warehouse warehouse) {
+    public Trip(long id, Date tripDate, RouteEnum route, TripStatusEnum tripStatus, CustomerOrder customerOrder, Courier courier, Warehouse warehouse) {
         this.id = id;
         this.tripDate = tripDate;
         this.route = route;
+        this.tripStatus = tripStatus;
         this.customerOrder = customerOrder;
         this.courier = courier;
         this.warehouse = warehouse;
@@ -61,6 +63,14 @@ public class Trip {
 
     public void setRoute(RouteEnum route) {
         this.route = route;
+    }
+
+    public TripStatusEnum getTripStatus() {
+        return tripStatus;
+    }
+
+    public void setTripStatus(TripStatusEnum tripStatus) {
+        this.tripStatus = tripStatus;
     }
 
     public CustomerOrder getCustomerOrder() {

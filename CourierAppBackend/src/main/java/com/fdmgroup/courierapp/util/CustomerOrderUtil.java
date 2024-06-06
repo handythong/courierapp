@@ -26,25 +26,26 @@ public class CustomerOrderUtil {
         return newParcel;
     }
 
-    public List<Party> generateOrderParty(RequestOrder requestOrder) {
-        List<Party> parties = new ArrayList<>();
+    public Party generateOrderRecipient(RequestOrder requestOrder) {
         Party recipient = new Party();
         recipient.setEmail(requestOrder.getToEmail());
         recipient.setPhoneNo(requestOrder.getToPhone());
         recipient.setFullName(requestOrder.getToFullName());
         recipient.setAddress(requestOrder.getToAddress());
         recipient.setPartyType(PartyEnum.RECIPIENT);
+        return recipient;
+    }
 
+    public Party generateOrderSender(RequestOrder requestOrder) {
         Party sender = new Party();
         sender.setEmail(requestOrder.getFromEmail());
         sender.setPhoneNo(requestOrder.getFromPhone());
         sender.setFullName(requestOrder.getFromFullName());
         sender.setAddress(requestOrder.getFromAddress());
         sender.setPartyType(PartyEnum.SENDER);
-        parties.add(recipient);
-        parties.add(sender);
-        return parties;
+        return sender;
     }
+
 
     public Date generateDeliveryDate() {
         // 5 days from order date
@@ -59,6 +60,17 @@ public class CustomerOrderUtil {
         status.setRemarks("Order Created");
         status.setStatusUpdateDate(new Date());
         return status;
+    }
+
+    public Trip generatePickupTrip() {
+        Trip trip = new Trip();
+        Calendar calendar = Calendar.getInstance();
+        calendar.add(Calendar.DAY_OF_YEAR, 2);
+
+        trip.setRoute(RouteEnum.INBOUND);
+        trip.setTripDate(calendar.getTime());
+        trip.setTripStatus(TripStatusEnum.UNASSIGNED);
+        return trip;
     }
 
     public OrderDetails generateOrderDetails(CustomerOrder customerOrder) {

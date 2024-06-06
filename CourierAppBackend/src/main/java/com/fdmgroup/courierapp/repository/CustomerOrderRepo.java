@@ -13,16 +13,18 @@ public interface CustomerOrderRepo extends JpaRepository<CustomerOrder,Long> {
 
     @Query(value = "SELECT co.* FROM customer_order co"
             + " INNER JOIN customer c"
-            + " WHERE co.customer_id = c.account_id"
-            + " AND c.account_id=?1"
+            + " ON co.customer_id = c.account_id"
+            + " WHERE c.account_id=?1"
             + " ORDER BY co.order_date DESC",
             nativeQuery = true)
     List<CustomerOrder> findAllWithCustomerIdDesc(long customerId);
 
-    @Query(value = "SELECT co.* FROM customer_order co"
+    @Query(value = "SELECT DISTINCT co.* FROM customer_order co"
+            + " INNER JOIN trip tr"
+            + " ON tr.customer_order_id = co.id"
             + " INNER JOIN courier cr"
-            + " WHERE co.courier_id = cr.account_id"
-            + " AND cr.account_id=?1"
+            + " ON tr.courier_id = cr.account_id"
+            + " WHERE cr.account_id=?1"
             + " ORDER BY co.order_date DESC",
             nativeQuery = true)
     List<CustomerOrder> findAllWithCourierIdDesc(long courierId);

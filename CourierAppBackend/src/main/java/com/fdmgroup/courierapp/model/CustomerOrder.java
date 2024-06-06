@@ -24,7 +24,7 @@ public class CustomerOrder {
 	@OneToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name = "parcel_id")
 	private Parcel parcel;
-	@OneToMany(cascade = CascadeType.ALL)
+	@OneToMany(mappedBy = "customerOrder", cascade = CascadeType.ALL)
 	private List<Party> parties = new ArrayList<>();
 	@ManyToOne
 	@JoinColumn(name = "customer_id")
