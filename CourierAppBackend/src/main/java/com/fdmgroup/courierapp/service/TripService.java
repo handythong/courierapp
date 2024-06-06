@@ -16,7 +16,10 @@ public class TripService {
         return tripRepo.save(trip);
     }
 
-    public List<Trip> getTripByCourierId(long courierId){
+    public List<Trip> getTripByCourierId(long courierId) {
         return tripRepo.findAllByCourierIdDesc(courierId);
+    }
+    public List<Trip> getAllTrips() {
+        return tripRepo.findAllTrips();
     }
 }
