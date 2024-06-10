@@ -2,11 +2,14 @@ package com.fdmgroup.courierapp.controller;
 
 import com.fdmgroup.courierapp.apimodel.*;
 import com.fdmgroup.courierapp.exception.CourierNotFoundException;
-import com.fdmgroup.courierapp.exception.OrderNotFoundException;
 import com.fdmgroup.courierapp.exception.TripNotFoundException;
 import com.fdmgroup.courierapp.exception.WarehouseNotFoundException;
 import com.fdmgroup.courierapp.model.*;
 import com.fdmgroup.courierapp.service.*;
+import com.fdmgroup.courierapp.model.Courier;
+import com.fdmgroup.courierapp.service.CourierService;
+import com.fdmgroup.courierapp.service.StatusService;
+import com.fdmgroup.courierapp.service.TripService;
 import com.fdmgroup.courierapp.util.CustomerOrderUtil;
 import com.fdmgroup.courierapp.util.StatusUtil;
 import com.fdmgroup.courierapp.util.TripUtil;
@@ -15,7 +18,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -123,4 +125,14 @@ public class CourierController {
         ResponseTripUpdate responseTripUpdate = new ResponseTripUpdate("Success", "Status Updated", tripUtil.generateTripDetails(trip));
         return new ResponseEntity<>(responseTripUpdate, HttpStatus.OK);
     }
+
+    @GetMapping("/couriers")
+    public ResponseEntity<ResponseCourierList> getCourierList() {
+        List<com.fdmgroup.courierapp.apimodel.Courier> couriers = courierService.getAllCouriers()
+                .stream()
+                .map(courier -> new com.fdmgroup.courierapp.apimodel.Courier(courier.getAccountId(), courier.getFullName(), courier.getVehicleCapacity()))
+                .collect(Collectors.toList());
+        return new ResponseEntity<>(new ResponseCourierList("Success", "Retrieved successfully", couriers), HttpStatus.OK);
+    }
+
 }

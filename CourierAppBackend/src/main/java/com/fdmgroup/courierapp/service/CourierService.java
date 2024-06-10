@@ -8,6 +8,7 @@ import com.fdmgroup.courierapp.model.Courier;
 import com.fdmgroup.courierapp.repository.CourierRepo;
 
 import java.util.Date;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -29,5 +30,9 @@ public class CourierService {
 		} else {
 			throw new CourierNotFoundException("Courier not found");
 		}
+	}
+
+	public List<Courier> getAllCouriers() {
+		return courierRepo.getAllCouriers();
 	}
 }

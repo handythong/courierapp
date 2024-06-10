@@ -6,6 +6,7 @@ import org.springframework.stereotype.Repository;
 
 import com.fdmgroup.courierapp.model.Courier;
 
+import java.util.List;
 import java.util.Optional;
 
 @Repository
@@ -17,4 +18,7 @@ public interface CourierRepo extends JpaRepository<Courier,Long> {
             + " AND a.username=?1 ",
             nativeQuery = true)
     Optional<Courier> getCourierWithAccountUsername(String username);
+
+    @Query(value = "SELECT * FROM courier;", nativeQuery = true)
+    List<Courier> getAllCouriers();
 }
