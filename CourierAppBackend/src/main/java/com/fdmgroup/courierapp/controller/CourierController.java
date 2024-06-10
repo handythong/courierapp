@@ -4,11 +4,9 @@ import com.fdmgroup.courierapp.apimodel.*;
 import com.fdmgroup.courierapp.exception.CourierNotFoundException;
 import com.fdmgroup.courierapp.exception.OrderNotFoundException;
 import com.fdmgroup.courierapp.exception.TripNotFoundException;
+import com.fdmgroup.courierapp.exception.WarehouseNotFoundException;
 import com.fdmgroup.courierapp.model.*;
-import com.fdmgroup.courierapp.service.CourierService;
-import com.fdmgroup.courierapp.service.CustomerOrderService;
-import com.fdmgroup.courierapp.service.StatusService;
-import com.fdmgroup.courierapp.service.TripService;
+import com.fdmgroup.courierapp.service.*;
 import com.fdmgroup.courierapp.util.CustomerOrderUtil;
 import com.fdmgroup.courierapp.util.StatusUtil;
 import com.fdmgroup.courierapp.util.TripUtil;
@@ -38,6 +36,8 @@ public class CourierController {
     TripUtil tripUtil;
     @Autowired
     TripService tripService;
+    @Autowired
+    WarehouseService warehouseService;
 
     @GetMapping("/orders")
     public ResponseEntity<ResponseTripHistory> getCourierTripHistory(@RequestHeader("username") String username){
@@ -80,14 +80,21 @@ public class CourierController {
         Status status;
         if (trip.getRoute() == RouteEnum.INBOUND) {
             switch(tripStatusEnum) {
-                case ASSIGNED:
-                    status = new Status(StatusEnum.PROCESSING);
-                    break;
                 case RETRIEVED:
                     status = new Status(StatusEnum.PICKED_UP);
                     break;
                 case COMPLETED:
                     status = new Status(StatusEnum.SORTING);
+                    //generate delivery trip when pickup trip is completed
+                    Trip deliveryTrip = tripUtil.generateDeliveryTrip();
+                    try {
+                        deliveryTrip.setWarehouse(warehouseService.findById(1L));
+                    } catch (WarehouseNotFoundException e) {
+                        ResponseTripUpdate responseTripUpdate = new ResponseTripUpdate("Failed", e.getMessage());
+                        return new ResponseEntity<>(responseTripUpdate, HttpStatus.OK);
+                    }
+                    deliveryTrip.setCustomerOrder(trip.getCustomerOrder());
+                    tripService.saveTrip(deliveryTrip);
                     break;
                 default:
                     ResponseTripUpdate responseTripUpdate = new ResponseTripUpdate("Failed", "Status unauthorized to update");
@@ -95,9 +102,6 @@ public class CourierController {
             }
         } else {
             switch(tripStatusEnum) {
-                case ASSIGNED:
-                    status = new Status(StatusEnum.READY_FOR_DELIVERY);
-                    break;
                 case RETRIEVED:
                     status = new Status(StatusEnum.DELIVERING);
                     break;
