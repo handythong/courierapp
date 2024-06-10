@@ -2,6 +2,7 @@ package com.fdmgroup.courierapp.util;
 
 import com.fdmgroup.courierapp.model.Status;
 import com.fdmgroup.courierapp.model.StatusEnum;
+import com.fdmgroup.courierapp.model.TripStatusEnum;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -26,7 +27,23 @@ public class StatusUtil {
                 return new Status(StatusEnum.CANCELLED);
             case "OTHER":
                 return new Status(StatusEnum.OTHER);
+            default:
+                return null;
         }
-        return null;
+    }
+
+    public TripStatusEnum tripStatusMapper(String tripStatus) {
+        switch (tripStatus) {
+            case "UNASSIGNED":
+                return TripStatusEnum.UNASSIGNED;
+            case "ASSIGNED":
+                return TripStatusEnum.ASSIGNED;
+            case "RETRIEVED":
+                return TripStatusEnum.RETRIEVED;
+            case "COMPLETED":
+                return TripStatusEnum.COMPLETED;
+            default:
+                return null;
+        }
     }
 }
