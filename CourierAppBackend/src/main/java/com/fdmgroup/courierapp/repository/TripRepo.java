@@ -1,7 +1,6 @@
 package com.fdmgroup.courierapp.repository;
 
 import com.fdmgroup.courierapp.model.*;
-import com.fdmgroup.courierapp.util.QueryBuilder;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
