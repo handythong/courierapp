@@ -54,11 +54,11 @@ public class Regions {
             .flatMap(List::stream)
             .collect(Collectors.toList());
 
-    public Dictionary<String, List<Integer>> regions = new Hashtable<>() {{
-        put("North", north);
-        put("NorthEast", northeast);
-        put("East", east);
-        put("West", west);
-        put("Central", central);
+    public Dictionary<RegionEnum, List<Integer>> regions = new Hashtable<>() {{
+        put(RegionEnum.NORTH, north);
+        put(RegionEnum.NORTHEAST, northeast);
+        put(RegionEnum.EAST, east);
+        put(RegionEnum.WEST, west);
+        put(RegionEnum.CENTRAL, central);
     }};
 }

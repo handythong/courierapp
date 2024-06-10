@@ -7,9 +7,9 @@ public class ResponseTrip {
 
     private String status;
     private String message;
-    private List<Trip> trips;
+    private List<TripDetails> trips;
 
-    public ResponseTrip(String status, String message, List<Trip> trips) {
+    public ResponseTrip(String status, String message, List<TripDetails> trips) {
         this.status = status;
         this.message = message;
         this.trips = trips;
@@ -36,9 +36,9 @@ public class ResponseTrip {
         this.message = message;
     }
 
-    public List<Trip> getTrips() {
+    public List<TripDetails> getTrips() {
         return trips;
     }
 
-    public void setTrips(List<Trip> trips) { this.trips = trips; }
+    public void setTrips(List<TripDetails> trips) { this.trips = trips; }
 }

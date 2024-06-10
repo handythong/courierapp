@@ -11,7 +11,8 @@ public class OrderDashboardDetails {
     private LocalDate orderDate;
     private LocalDate deliveryDate;
     private Address toAddress;
-    private String currentStatus;
+    private Address fromAddress;
+	private String currentStatus;
 
     public OrderDashboardDetails() {
     }
@@ -72,4 +73,11 @@ public class OrderDashboardDetails {
 		this.toAddress = toAddress;
 	}
 
+    public Address getFromAddress() {
+		return fromAddress;
+	}
+
+	public void setFromAddress(Address fromAddress) {
+		this.fromAddress = fromAddress;
+	}
 }
