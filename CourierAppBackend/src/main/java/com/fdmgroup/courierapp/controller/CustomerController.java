@@ -56,7 +56,7 @@ public class CustomerController {
     }
 
     @PutMapping("/{orderId}")
-    public ResponseEntity<ResponseOrderUpdate> updateCustomerOrder(
+    public ResponseEntity<ResponseOrder> updateCustomerOrder(
             @PathVariable("orderId") Long orderId,
             @RequestHeader("username") String username,
             @RequestBody RequestOrderUpdate requestOrderUpdate
@@ -67,17 +67,17 @@ public class CustomerController {
             customerOrder = customerOrderService.findByCustomerOrderId(orderId);
             customer = customerService.findByUsername(username);
         } catch (OrderNotFoundException | CustomerNotFoundException e) {
-            return new ResponseEntity<>(new ResponseOrderUpdate("Failed", e.getMessage()), HttpStatus.OK);
+            return new ResponseEntity<>(new ResponseOrder("Failed", e.getMessage()), HttpStatus.OK);
         }
 
         int lastIndex = customerOrder.getStatuses().size() - 1;
 
         if (!customerOrder.getStatuses().get(lastIndex).getStatus().equals(StatusEnum.ORDER_CREATED)) {
-            return new ResponseEntity<>(new ResponseOrderUpdate("Failed", "Not allowed to update order anymore"), HttpStatus.OK);
+            return new ResponseEntity<>(new ResponseOrder("Failed", "Not allowed to update order anymore"), HttpStatus.OK);
         } else if (!customerOrder.getCustomer().getAccountId().equals(customer.getAccountId())) {
-            return new ResponseEntity<>(new ResponseOrderUpdate("Failed", "Order does not belong to Customer Id " + customer.getAccountId()), HttpStatus.OK);
+            return new ResponseEntity<>(new ResponseOrder("Failed", "Order does not belong to Customer Id " + customer.getAccountId()), HttpStatus.OK);
         } else if (!requestOrderUpdate.areAllFieldsPresent()) {
-            return new ResponseEntity<>(new ResponseOrderUpdate("Failed", "Fields cannot be empty"), HttpStatus.OK);
+            return new ResponseEntity<>(new ResponseOrder("Failed", "Fields cannot be empty"), HttpStatus.OK);
         }
 
 
@@ -86,7 +86,7 @@ public class CustomerController {
         customerOrder.replaceParty(updatedSender, updatedRecipient);
         customerOrder = customerOrderService.saveOrder(customerOrder);
 
-        ResponseOrderUpdate responseOrderUpdate = new ResponseOrderUpdate("Success", "Updated order success", customerOrderUtil.generateOrderDetails(customerOrder));
-        return new ResponseEntity<>(responseOrderUpdate, HttpStatus.OK);
+        ResponseOrder responseOrder = new ResponseOrder("Success", "Updated order success", customerOrderUtil.generateOrderDetails(customerOrder));
+        return new ResponseEntity<>(responseOrder, HttpStatus.OK);
     }
 }

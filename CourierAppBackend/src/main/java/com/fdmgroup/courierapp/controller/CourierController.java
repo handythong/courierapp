@@ -3,6 +3,7 @@ package com.fdmgroup.courierapp.controller;
 import com.fdmgroup.courierapp.apimodel.*;
 import com.fdmgroup.courierapp.exception.CourierNotFoundException;
 import com.fdmgroup.courierapp.exception.OrderNotFoundException;
+import com.fdmgroup.courierapp.exception.TripNotFoundException;
 import com.fdmgroup.courierapp.model.*;
 import com.fdmgroup.courierapp.service.CourierService;
 import com.fdmgroup.courierapp.service.CustomerOrderService;
@@ -28,8 +29,6 @@ public class CourierController {
     @Autowired
     CourierService courierService;
     @Autowired
-    CustomerOrderService customerOrderService;
-    @Autowired
     CustomerOrderUtil customerOrderUtil;
     @Autowired
     StatusService statusService;
@@ -53,50 +52,71 @@ public class CourierController {
         List<TripDetails> tripDetailsList = courierTrips.stream()
                 .map(trip -> tripUtil.generateTripDetails(trip))
                 .collect(Collectors.toList());
-//        List<CustomerOrder> customerOrders = customerOrderService.getOrderHistoryByCourierId(courier.getAccountId());
-//        List<OrderDetails> orderDetailsList = customerOrders.stream().map(customerOrder -> customerOrderUtil.generateOrderDetails(customerOrder)).collect(Collectors.toList());
-//        List<OrderDashboardDetails> orderDetailsList = customerOrders.stream()
-//        		.map(customerOrder -> customerOrderUtil.generateOrderDashboardDetails(customerOrder))
-//        		.collect(Collectors.toList());
         ResponseTripHistory responseTripHistory = new ResponseTripHistory("Success", "Fetch success", tripDetailsList);
-//        ResponseOrderHistory responseOrderHistory = new ResponseOrderHistory("Success", "Fetch success", orderDetailsList);
         return new ResponseEntity<>(responseTripHistory, HttpStatus.OK);
     }
-//
-//    @PutMapping("/{orderId}")
-//    public ResponseEntity<ResponseOrder> updateStatus(@RequestHeader("username") String username, @RequestBody OrderStatus orderStatus, @PathVariable Long orderId) {
-//        CustomerOrder customerOrder;
-//        Courier courier;
-//        try {
-//            customerOrder = customerOrderService.findByCustomerOrderId(orderId);
-//            courier = courierService.findByUsername(username);
-//        } catch (OrderNotFoundException e) {
-//            ResponseOrder responseOrder = new ResponseOrder("Failed", "Customer Order Not Found");
-//            return new ResponseEntity<>(responseOrder, HttpStatus.OK);
-//        } catch (CourierNotFoundException e) {
-//            ResponseOrder responseOrder = new ResponseOrder("Failed", "Courier Not Found");
-//            return new ResponseEntity<>(responseOrder, HttpStatus.OK);
-//        }
-//
-//        if (courier.getAccountId() != customerOrder.getCourier().getAccountId()) {
-//            ResponseOrder responseOrder = new ResponseOrder("Failed", "Courier Not Authorize to update");
-//            return new ResponseEntity<>(responseOrder, HttpStatus.OK);
-//        }
-//        Status status = statusUtil.statusMapper(orderStatus.getStatus());
-//
-//        StatusEnum[] courierStatusList = {StatusEnum.PICKED_UP, StatusEnum.SORTING, StatusEnum.DELIVERING, StatusEnum.DELIVERED};
-//        if (Arrays.asList(courierStatusList).contains(status.getStatus())) {
-//            status.setCustomerOrder(customerOrder);
-//            status.setRemarks(orderStatus.getRemarks());
-//            status.setStatusUpdateDate(new Date());
-//            status = statusService.createStatus(status);
-//        } else {
-//            ResponseOrder responseOrder = new ResponseOrder("Failed", "Updated status is blocked for courier");
-//            return new ResponseEntity<>(responseOrder, HttpStatus.OK);
-//        }
-//
-//        customerOrder.appendStatus(status);
-//        ResponseOrder responseOrder = new ResponseOrder("Success", "Status Updated", customerOrderUtil.generateOrderDetails(customerOrder));
-//        return new ResponseEntity<>(responseOrder, HttpStatus.OK);
-//    }
+
+    @PutMapping("/{tripId}")
+    public ResponseEntity<ResponseTripUpdate> updateStatus(@RequestHeader("username") String username, @RequestBody TripStatus tripStatus, @PathVariable Long tripId) {
+        Trip trip;
+        Courier courier;
+        try {
+            trip = tripService.findById(tripId);
+            courier = courierService.findByUsername(username);
+        } catch (TripNotFoundException e) {
+            ResponseTripUpdate responseTripUpdate = new ResponseTripUpdate("Failed", "Trip Not Found");
+            return new ResponseEntity<>(responseTripUpdate, HttpStatus.OK);
+        } catch (CourierNotFoundException e) {
+            ResponseTripUpdate responseTripUpdate = new ResponseTripUpdate("Failed", "Courier Not Found");
+            return new ResponseEntity<>(responseTripUpdate, HttpStatus.OK);
+        }
+
+        if (courier.getAccountId() != trip.getCourier().getAccountId()) {
+            ResponseTripUpdate responseTripUpdate = new ResponseTripUpdate("Failed", "Courier Not Authorize to update");
+            return new ResponseEntity<>(responseTripUpdate, HttpStatus.OK);
+        }
+        TripStatusEnum tripStatusEnum = statusUtil.tripStatusMapper(tripStatus.getTripStatus());
+
+        Status status;
+        if (trip.getRoute() == RouteEnum.INBOUND) {
+            switch(tripStatusEnum) {
+                case ASSIGNED:
+                    status = new Status(StatusEnum.PROCESSING);
+                    break;
+                case RETRIEVED:
+                    status = new Status(StatusEnum.PICKED_UP);
+                    break;
+                case COMPLETED:
+                    status = new Status(StatusEnum.SORTING);
+                    break;
+                default:
+                    ResponseTripUpdate responseTripUpdate = new ResponseTripUpdate("Failed", "Status unauthorized to update");
+                    return new ResponseEntity<>(responseTripUpdate, HttpStatus.OK);
+            }
+        } else {
+            switch(tripStatusEnum) {
+                case ASSIGNED:
+                    status = new Status(StatusEnum.READY_FOR_DELIVERY);
+                    break;
+                case RETRIEVED:
+                    status = new Status(StatusEnum.DELIVERING);
+                    break;
+                case COMPLETED:
+                    status = new Status(StatusEnum.DELIVERED);
+                    break;
+                default:
+                    ResponseTripUpdate responseTripUpdate = new ResponseTripUpdate("Failed", "Status unauthorized to update");
+                    return new ResponseEntity<>(responseTripUpdate, HttpStatus.OK);
+            }
+        }
+        trip.setTripStatus(tripStatusEnum);
+        status.setCustomerOrder(trip.getCustomerOrder());
+        status.setRemarks(tripStatus.getRemarks());
+        status.setStatusUpdateDate(new Date());
+        statusService.createStatus(status);
+        tripService.saveTrip(trip);
+
+        ResponseTripUpdate responseTripUpdate = new ResponseTripUpdate("Success", "Status Updated", tripUtil.generateTripDetails(trip));
+        return new ResponseEntity<>(responseTripUpdate, HttpStatus.OK);
+    }
 }
