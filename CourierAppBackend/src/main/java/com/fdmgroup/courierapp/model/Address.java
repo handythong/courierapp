@@ -16,6 +16,7 @@ public class Address {
     private String postalCode;
     private String country;
     private String city;
+    private String region;
 
     public Address() {
     }
@@ -66,5 +67,13 @@ public class Address {
 
     public void setCity(String city) {
         this.city = city;
+    }
+
+    public String getRegion() {
+        return region;
+    }
+
+    public void setRegion(String region) {
+        this.region = region;
     }
 }
