@@ -2,6 +2,10 @@ package com.fdmgroup.courierapp.model;
 
 import jakarta.persistence.*;
 
+import java.util.List;
+import java.util.Map.Entry;
+import java.util.Objects;
+
 @Entity
 public class Address {
     @Id
@@ -69,11 +73,18 @@ public class Address {
         this.city = city;
     }
 
-    public String getRegion() {
-        return region;
-    }
+    public String getRegion() { return region; }
 
-    public void setRegion(String region) {
-        this.region = region;
+    public void setRegion(String postalCode) {
+        Regions regions = new Regions();
+        System.out.println(regions.regionsHash);
+        for (Entry<RegionEnum, List<String>> entry: regions.regionsHash.entrySet()) {
+            for (String value : entry.getValue()) {
+                if (Objects.equals(value, postalCode.substring(0, 2))) {
+                    this.region = entry.getKey().name();
+                    break;
+                }
+            }
+        }
     }
 }

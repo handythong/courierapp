@@ -74,7 +74,9 @@ public class CustomerOrderController {
         newCustomerOrder.getStatuses().add(orderCreatedStatus);
 
         recipient.setCustomerOrder(newCustomerOrder);
+        recipient.getAddress().setRegion(recipient.getAddress().getPostalCode());
         sender.setCustomerOrder(newCustomerOrder);
+        sender.getAddress().setRegion(sender.getAddress().getPostalCode());
         newCustomerOrder.getParties().add(recipient);
         newCustomerOrder.getParties().add(sender);
 

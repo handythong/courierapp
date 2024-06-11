@@ -22,11 +22,13 @@ public class CourierappApplication {
 
 	public static void main(String[] args) {
 		SpringApplication.run(CourierappApplication.class, args);
+		System.out.println("Application has started on port 8081");
 	}
 
 	@EventListener(ApplicationReadyEvent.class)
 	public void startup() {
-		if (!accountService.isDuplicateUsername("Admin001")) {
+		if
+		(!accountService.isDuplicateUsername("Admin001")) {
 			try {
 				Account adminAccount = new Account();
 				adminAccount.setUsername("Admin001");
