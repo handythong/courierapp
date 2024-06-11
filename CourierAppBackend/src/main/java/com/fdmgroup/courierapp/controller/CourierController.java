@@ -41,7 +41,7 @@ public class CourierController {
     @Autowired
     WarehouseService warehouseService;
 
-    @GetMapping("/orders")
+    @GetMapping("/trips")
     public ResponseEntity<ResponseTripHistory> getCourierTripHistory(@RequestHeader("username") String username){
         Courier courier;
         try {
