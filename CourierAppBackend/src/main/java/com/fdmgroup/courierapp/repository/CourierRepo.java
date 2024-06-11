@@ -13,6 +13,11 @@ import java.util.Optional;
 public interface CourierRepo extends JpaRepository<Courier,Long> {
 
     @Query(value = "SELECT cr.* FROM courier cr"
+            + " WHERE cr.account_id = ?1",
+            nativeQuery = true)
+    Optional<Courier> getCourierByCourierId(long id);
+
+    @Query(value = "SELECT cr.* FROM courier cr"
             + " INNER JOIN account a"
             + " WHERE cr.account_id=a.id"
             + " AND a.username=?1 ",

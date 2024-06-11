@@ -23,6 +23,15 @@ public class CourierService {
 		return createdCourier;
 	}
 
+	public Courier findByCourierId(long courierId) throws CourierNotFoundException {
+		Optional<Courier> optCourier = courierRepo.getCourierByCourierId(courierId);
+		if (optCourier.isPresent()) {
+			return optCourier.get();
+		} else {
+			throw new CourierNotFoundException("Courier not found");
+		}
+	}
+
 	public Courier findByUsername(String username) throws CourierNotFoundException {
 		Optional<Courier> optCourier = courierRepo.getCourierWithAccountUsername(username);
 		if (optCourier.isPresent()) {

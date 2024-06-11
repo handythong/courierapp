@@ -1,13 +1,15 @@
 package com.fdmgroup.courierapp.controller;
 
+import com.fdmgroup.courierapp.apimodel.RequestCourierAssignment;
 import com.fdmgroup.courierapp.apimodel.ResponseTrip;
+import com.fdmgroup.courierapp.apimodel.ResponseTripUpdate;
 import com.fdmgroup.courierapp.apimodel.TripDetails;
-import com.fdmgroup.courierapp.model.RegionEnum;
-import com.fdmgroup.courierapp.model.RouteEnum;
-import com.fdmgroup.courierapp.model.Trip;
-import com.fdmgroup.courierapp.model.TripStatusEnum;
+import com.fdmgroup.courierapp.exception.CourierNotFoundException;
+import com.fdmgroup.courierapp.model.*;
+import com.fdmgroup.courierapp.service.CourierService;
 import com.fdmgroup.courierapp.service.TripService;
 import com.fdmgroup.courierapp.util.TripFilter;
+import com.fdmgroup.courierapp.util.TripUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,8 +19,6 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 @RequestMapping("/admin")
 @RestController
@@ -27,6 +27,10 @@ public class AdminController {
 
     @Autowired
     TripService tripService;
+    @Autowired
+    CourierService courierService;
+    @Autowired
+    TripUtil tripUtil;
 
     @PostMapping("/trips")
     public ResponseEntity<ResponseTrip> getTripsByFilter(@RequestBody List<TripFilter> filters) {
@@ -89,5 +93,48 @@ public class AdminController {
         } catch (ParseException e) {
             return false;
         }
+    }
+
+    @PutMapping("trips/{tripId}")
+    public ResponseEntity<ResponseTripUpdate> assignCourierToTrip(
+            @PathVariable("tripId") String tripIdString,
+            @RequestBody RequestCourierAssignment requestCourierAssignment
+    ) {
+        long tripId;
+        long assignedCourierId;
+        try {
+            tripId = Long.parseLong(tripIdString);
+            assignedCourierId = Long.parseLong(requestCourierAssignment.getAssignedCourierId());
+        } catch (NumberFormatException e) {
+            return new ResponseEntity<>(new ResponseTripUpdate("Failed", "tripId/assignedCourierId must be numeric."), HttpStatus.OK);
+        }
+
+        Trip trip = tripService.getTripByTripId(tripId);
+
+        if (trip.getCourier() != null) {
+            String message = "Trip Id " + tripId + " has been assigned to a courier Id " + trip.getCourier().getAccountId();
+            return new ResponseEntity<>(new ResponseTripUpdate("Failed", message, tripUtil.generateTripDetails(trip)),  HttpStatus.OK);
+        }
+
+        Courier courier;
+        try {
+            courier = courierService.findByCourierId(assignedCourierId);
+        } catch (CourierNotFoundException e) {
+            return new ResponseEntity<>(new ResponseTripUpdate("Failed", e.getMessage(), tripUtil.generateTripDetails(trip)), HttpStatus.OK);
+        }
+
+        RouteEnum route = trip.getRoute();
+        if (route == RouteEnum.INBOUND) {
+            trip.getCustomerOrder().appendStatus(new Status(StatusEnum.PROCESSING, "Trip is assigned to courier - Ready for pick up."));
+        } else if (route == RouteEnum.OUTBOUND) {
+            trip.getCustomerOrder().appendStatus(new Status(StatusEnum.READY_FOR_DELIVERY, "Trip is assigned to courier - Ready for delivery."));
+        } else {
+            return new ResponseEntity<>(new ResponseTripUpdate("Failed", "Trip's route is invalid. Please contact admin.", tripUtil.generateTripDetails(trip)), HttpStatus.OK);
+        }
+
+        trip.setCourier(courier);
+        trip.setTripStatus(TripStatusEnum.ASSIGNED);
+        tripService.saveTrip(trip);
+        return new ResponseEntity<>(new ResponseTripUpdate("Success", "Assign success", tripUtil.generateTripDetails(trip)), HttpStatus.OK);
     }
 }

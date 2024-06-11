@@ -41,6 +41,10 @@ public class TripService {
         }
     }
 
+    public Trip getTripByTripId(long tripId) {
+        return tripRepo.findById(tripId);
+    }
+
     public List<Trip> getTripByCourierId(long courierId) {
         return tripRepo.findAllByCourierIdDesc(courierId);
     }

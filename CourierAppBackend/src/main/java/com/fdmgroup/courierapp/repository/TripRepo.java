@@ -11,6 +11,12 @@ import java.util.List;
 
 @Repository
 public interface TripRepo extends JpaRepository<Trip, Long>, JpaSpecificationExecutor<Trip> {
+
+    @Query(value = "SELECT * FROM trip tr"
+            + " WHERE tr.id = ?1",
+            nativeQuery = true)
+    Trip findById(long tripId);
+
     @Query(value = "SELECT tr.* FROM trip tr"
             + " INNER JOIN courier cr"
             + " ON tr.courier_id = cr.account_id"
