@@ -1,5 +1,8 @@
 package com.fdmgroup.courierapp.util;
 
+import com.fdmgroup.courierapp.model.Party;
+import com.fdmgroup.courierapp.model.PartyEnum;
+import com.fdmgroup.courierapp.model.RouteEnum;
 import com.fdmgroup.courierapp.model.Trip;
 import jakarta.persistence.criteria.*;
 import org.springframework.data.jpa.domain.Specification;
@@ -30,7 +33,14 @@ public class TripSpecification {
                             Join<Object, Object> join1 = root.join("customerOrder");
                             Join<Object, Object> join2 = join1.join("parties");
                             Join<Object, Object> join3 = join2.join("address");
-                            predicates.add(criteriaBuilder.equal(join3.get("region"), columnValue));
+
+                            Expression<Object> partyTypeExpression = criteriaBuilder.selectCase()
+                                    .when(criteriaBuilder.equal(root.get("route"), RouteEnum.INBOUND), PartyEnum.SENDER)
+                                    .when(criteriaBuilder.equal(root.get("route"), RouteEnum.OUTBOUND), PartyEnum.RECIPIENT);
+
+                            Predicate partyTypePredicate = criteriaBuilder.equal(join2.get("partyType"), partyTypeExpression);
+                            Predicate regionPredicate = criteriaBuilder.equal(join3.get("region"), columnValue);
+                            predicates.add(criteriaBuilder.and(partyTypePredicate, regionPredicate));
                             break;
                         case "tripDate":
                             try {
@@ -45,12 +55,9 @@ public class TripSpecification {
                             predicates.add(criteriaBuilder.equal(root.get(columnKey), columnValue));
                             break;
                     }
-//                    Predicate predicate = criteriaBuilder.equal(root.get(filter.getColumnKey()), filter.getColumnValue());
-//                    predicates.add(predicate);
                 }
-
                 return criteriaBuilder.and(predicates.toArray(new Predicate[predicates.size()]));
             }
-        }; //columnEqual() function ends
+        };
     }
 }
