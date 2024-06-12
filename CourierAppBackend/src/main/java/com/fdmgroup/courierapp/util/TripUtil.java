@@ -6,6 +6,7 @@ import com.fdmgroup.courierapp.model.*;
 import org.springframework.stereotype.Component;
 
 import java.util.Calendar;
+import java.util.Optional;
 
 @Component
 public class TripUtil {
@@ -28,6 +29,22 @@ public class TripUtil {
         tripDetails.setRoute(trip.getRoute().toString());
         tripDetails.setPartyAddress(this.getPartyAddress(trip));
         tripDetails.setSortingWarehouse(this.warehouseDetailsMapper(trip.getWarehouse()));
+        return tripDetails;
+    }
+
+    public TripDetails generateTripDetailsWithCourierId(Trip trip) {
+        TripDetails tripDetails = new TripDetails();
+        tripDetails.setTripId(trip.getId());
+        tripDetails.setTripDate(trip.getTripDate());
+        tripDetails.setTripStatus(trip.getTripStatus().toString());
+        tripDetails.setRoute(trip.getRoute().toString());
+        tripDetails.setPartyAddress(this.getPartyAddress(trip));
+        tripDetails.setSortingWarehouse(this.warehouseDetailsMapper(trip.getWarehouse()));
+        if (trip.getCourier() == null) {
+            tripDetails.setCourierId(Optional.empty());
+        } else {
+            tripDetails.setCourierId(Optional.of(trip.getCourier().getAccountId()));
+        }
         return tripDetails;
     }
 

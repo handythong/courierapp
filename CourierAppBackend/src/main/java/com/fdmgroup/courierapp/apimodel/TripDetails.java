@@ -4,6 +4,7 @@ import com.fdmgroup.courierapp.model.Address;
 import com.fdmgroup.courierapp.model.Warehouse;
 
 import java.util.Date;
+import java.util.Optional;
 
 public class TripDetails {
     private long tripId;
@@ -12,6 +13,7 @@ public class TripDetails {
     private String route;
     private Address partyAddress;
     private WarehouseDetails sortingWarehouse;
+    private Optional<Long> courierId;
 
     public TripDetails() {
     }
@@ -62,5 +64,13 @@ public class TripDetails {
 
     public void setSortingWarehouse(WarehouseDetails sortingWarehouse) {
         this.sortingWarehouse = sortingWarehouse;
+    }
+
+    public Optional<Long> getCourierId() {
+        return courierId;
+    }
+
+    public void setCourierId(Optional<Long> courierId) {
+        this.courierId = courierId;
     }
 }

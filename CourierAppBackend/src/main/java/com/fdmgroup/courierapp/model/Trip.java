@@ -18,13 +18,13 @@ public class Trip {
     @Enumerated(EnumType.STRING)
     private TripStatusEnum tripStatus;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "customer_order_id")
     private CustomerOrder customerOrder;
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "courier_id")
     private Courier courier;
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "warehouse_id")
     private Warehouse warehouse;
 
@@ -88,6 +88,8 @@ public class Trip {
     public void setCourier(Courier courier) {
         this.courier = courier;
     }
+
+    public void unassignCourier() { this.courier = null; }
 
     public Warehouse getWarehouse() {
         return warehouse;
