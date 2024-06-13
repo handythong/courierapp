@@ -27,6 +27,13 @@ public class Status {
         this.status = status;
     }
 
+    public Status(StatusEnum status, String remarks, Date statusUpdateDate, CustomerOrder customerOrder) {
+        this.status = status;
+        this.remarks = remarks;
+        this.statusUpdateDate = statusUpdateDate;
+        this.customerOrder = customerOrder;
+    }
+
     public Status(long id, StatusEnum status, String remarks, Date statusUpdateDate, CustomerOrder customerOrder) {
         this.id = id;
         this.status = status;

@@ -1,15 +1,17 @@
 package com.fdmgroup.courierapp.apimodel;
 
+import com.fdmgroup.courierapp.model.Address;
+
 public class Sender {
     private String fromFullName;
     private String fromEmail;
     private String fromPhone;
-    private String fromAddress;
+    private Address fromAddress;
 
     public Sender() {
     }
 
-    public Sender(String fromFullName, String fromEmail, String fromPhone, String fromAddress) {
+    public Sender(String fromFullName, String fromEmail, String fromPhone, Address fromAddress) {
         this.fromFullName = fromFullName;
         this.fromEmail = fromEmail;
         this.fromPhone = fromPhone;
@@ -28,7 +30,7 @@ public class Sender {
         return fromPhone;
     }
 
-    public String getFromAddress() {
+    public Address getFromAddress() {
         return fromAddress;
     }
 
@@ -44,7 +46,7 @@ public class Sender {
         this.fromPhone = fromPhone;
     }
 
-    public void setFromAddress(String fromAddress) {
+    public void setFromAddress(Address fromAddress) {
         this.fromAddress = fromAddress;
     }
 }

@@ -26,23 +26,26 @@ public class CustomerOrderUtil {
         return newParcel;
     }
 
-    public Sender generateOrderSender(RequestOrder requestOrder) {
-        Sender newSender = new Sender();
-        newSender.setEmail(requestOrder.getFromEmail());
-        newSender.setPhoneNo(requestOrder.getFromPhone());
-        newSender.setFullName(requestOrder.getFromFullName());
-        newSender.setPickupAddress(requestOrder.getFromAddress());
-        return newSender;
+    public Party generateOrderRecipient(RequestOrder requestOrder) {
+        Party recipient = new Party();
+        recipient.setEmail(requestOrder.getToEmail());
+        recipient.setPhoneNo(requestOrder.getToPhone());
+        recipient.setFullName(requestOrder.getToFullName());
+        recipient.setAddress(requestOrder.getToAddress());
+        recipient.setPartyType(PartyEnum.RECIPIENT);
+        return recipient;
     }
 
-    public Recipient generateOrderRecipient(RequestOrder requestOrder) {
-        Recipient newRecipient = new Recipient();
-        newRecipient.setEmail(requestOrder.getToEmail());
-        newRecipient.setPhoneNo(requestOrder.getToPhone());
-        newRecipient.setFullName(requestOrder.getToFullName());
-        newRecipient.setDeliveryAddress(requestOrder.getToAddress());
-        return newRecipient;
+    public Party generateOrderSender(RequestOrder requestOrder) {
+        Party sender = new Party();
+        sender.setEmail(requestOrder.getFromEmail());
+        sender.setPhoneNo(requestOrder.getFromPhone());
+        sender.setFullName(requestOrder.getFromFullName());
+        sender.setAddress(requestOrder.getFromAddress());
+        sender.setPartyType(PartyEnum.SENDER);
+        return sender;
     }
+
 
     public Date generateDeliveryDate() {
         // 5 days from order date
@@ -59,20 +62,39 @@ public class CustomerOrderUtil {
         return status;
     }
 
+    public Trip generatePickupTrip() {
+        Trip trip = new Trip();
+        Calendar calendar = Calendar.getInstance();
+        calendar.add(Calendar.DAY_OF_YEAR, 2);
+
+        trip.setRoute(RouteEnum.INBOUND);
+        trip.setTripDate(calendar.getTime());
+        trip.setTripStatus(TripStatusEnum.UNASSIGNED);
+        return trip;
+    }
+
     public OrderDetails generateOrderDetails(CustomerOrder customerOrder) {
         OrderDetails newOrderDetails = new OrderDetails();
+        Party recipient = customerOrder.getParties().stream()
+                .filter(party -> party.getPartyType().equals(PartyEnum.RECIPIENT))
+                .findFirst()
+                .orElse(null);
+        Party sender = customerOrder.getParties().stream()
+                .filter(party -> party.getPartyType().equals(PartyEnum.SENDER))
+                .findFirst()
+                .orElse(null);
         newOrderDetails.setOrderId(customerOrder.getId());
         newOrderDetails.setOrderStatus(mappedOrderStatus(customerOrder));
         newOrderDetails.setDeliveryDate(customerOrder.getDeliveryDate());
         newOrderDetails.setOrderDate(customerOrder.getOrderDate());
-        newOrderDetails.setFromAddress(customerOrder.getSender().getPickupAddress());
-        newOrderDetails.setFromFullName(customerOrder.getSender().getFullName());
-        newOrderDetails.setFromEmail(customerOrder.getSender().getEmail());
-        newOrderDetails.setFromPhoneNo(customerOrder.getSender().getPhoneNo());
-        newOrderDetails.setToAddress(customerOrder.getRecipient().getDeliveryAddress());
-        newOrderDetails.setToFullName(customerOrder.getRecipient().getFullName());
-        newOrderDetails.setToEmail(customerOrder.getRecipient().getEmail());
-        newOrderDetails.setToPhoneNo(customerOrder.getRecipient().getPhoneNo());
+        newOrderDetails.setFromAddress(sender.getAddress());
+        newOrderDetails.setFromFullName(sender.getFullName());
+        newOrderDetails.setFromEmail(sender.getEmail());
+        newOrderDetails.setFromPhoneNo(sender.getPhoneNo());
+        newOrderDetails.setToAddress(recipient.getAddress());
+        newOrderDetails.setToFullName(recipient.getFullName());
+        newOrderDetails.setToEmail(recipient.getEmail());
+        newOrderDetails.setToPhoneNo(recipient.getPhoneNo());
         newOrderDetails.setWeight(customerOrder.getParcel().getWeight());
         newOrderDetails.setWidth(customerOrder.getParcel().getWidth());
         newOrderDetails.setHeight(customerOrder.getParcel().getHeight());
@@ -83,7 +105,7 @@ public class CustomerOrderUtil {
 
     public List<OrderStatus> mappedOrderStatus(CustomerOrder customerOrder) {
         List<OrderStatus> orderStatuses = new ArrayList<>();
-        for (Status status: customerOrder.getStatus()) {
+        for (Status status: customerOrder.getStatuses()) {
             OrderStatus orderStatus = new OrderStatus(status.getStatus().toString(), status.getRemarks(), status.getStatusUpdateDate());
             orderStatuses.add(orderStatus);
         }
@@ -92,13 +114,21 @@ public class CustomerOrderUtil {
     
 	public OrderDashboardDetails generateOrderDashboardDetails(CustomerOrder customerOrder) {
 		OrderDashboardDetails odb = new OrderDashboardDetails();
-		
+        Party recipient = customerOrder.getParties().stream()
+                .filter(party -> party.getPartyType().equals(PartyEnum.RECIPIENT))
+                .findFirst()
+                .orElse(null);
+        Party sender = customerOrder.getParties().stream()
+                .filter(party -> party.getPartyType().equals(PartyEnum.SENDER))
+                .findFirst()
+                .orElse(null);
 		odb.setOrderId(customerOrder.getId());
-		odb.setToFullName(customerOrder.getRecipient().getFullName());
-		odb.setFromFullName(customerOrder.getSender().getFullName());
-		odb.setToAddress(customerOrder.getRecipient().getDeliveryAddress());
+		odb.setToFullName(recipient.getFullName());
+		odb.setFromFullName(sender.getFullName());
+		odb.setFromAddress(sender.getAddress());
+		odb.setToAddress(recipient.getAddress());
 		
-		String currentStatus = customerOrder.getStatus().stream()
+		String currentStatus = customerOrder.getStatuses().stream()
 				.max(Comparator.comparing(Status::getStatusUpdateDate))
 				.map(Status::getStatus)
 				.map(Enum::toString)

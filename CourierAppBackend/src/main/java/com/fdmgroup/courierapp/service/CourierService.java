@@ -8,6 +8,7 @@ import com.fdmgroup.courierapp.model.Courier;
 import com.fdmgroup.courierapp.repository.CourierRepo;
 
 import java.util.Date;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -22,12 +23,25 @@ public class CourierService {
 		return createdCourier;
 	}
 
+	public Courier findByCourierId(long courierId) throws CourierNotFoundException {
+		Optional<Courier> optCourier = courierRepo.getCourierByCourierId(courierId);
+		if (optCourier.isPresent()) {
+			return optCourier.get();
+		} else {
+			throw new CourierNotFoundException("Courier not found");
+		}
+	}
+
 	public Courier findByUsername(String username) throws CourierNotFoundException {
 		Optional<Courier> optCourier = courierRepo.getCourierWithAccountUsername(username);
 		if (optCourier.isPresent()) {
 			return optCourier.get();
 		} else {
-			throw new CourierNotFoundException("Customer not found");
+			throw new CourierNotFoundException("Courier not found");
 		}
+	}
+
+	public List<Courier> getAllCouriers() {
+		return courierRepo.getAllCouriers();
 	}
 }

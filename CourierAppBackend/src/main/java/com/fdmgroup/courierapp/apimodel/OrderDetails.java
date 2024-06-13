@@ -1,5 +1,7 @@
 package com.fdmgroup.courierapp.apimodel;
 
+import com.fdmgroup.courierapp.model.Address;
+
 import java.util.Date;
 import java.util.List;
 
@@ -9,12 +11,12 @@ public class OrderDetails {
     private Date deliveryDate;
     private Date orderDate;
     //OrderRecipient field
-    private String fromAddress;
+    private Address fromAddress;
     private String fromFullName;
     private String fromEmail;
     private String fromPhoneNo;
     //OrderSender field
-    private String toAddress;
+    private Address toAddress;
     private String toFullName;
     private String toEmail;
     private String toPhoneNo;
@@ -60,11 +62,11 @@ public class OrderDetails {
         this.orderDate = orderDate;
     }
 
-    public String getFromAddress() {
+    public Address getFromAddress() {
         return fromAddress;
     }
 
-    public void setFromAddress(String fromAddress) {
+    public void setFromAddress(Address fromAddress) {
         this.fromAddress = fromAddress;
     }
 
@@ -92,11 +94,11 @@ public class OrderDetails {
         this.fromPhoneNo = fromPhoneNo;
     }
 
-    public String getToAddress() {
+    public Address getToAddress() {
         return toAddress;
     }
 
-    public void setToAddress(String toAddress) {
+    public void setToAddress(Address toAddress) {
         this.toAddress = toAddress;
     }
 

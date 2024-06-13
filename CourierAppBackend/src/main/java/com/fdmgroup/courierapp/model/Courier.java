@@ -19,19 +19,19 @@ public class Courier {
 	private String fullName;
 	private float vehicleCapacity;
 	private Date lastUpdated;
-	
+
 	@OneToMany(mappedBy = "courier")
-	private List<CustomerOrder> customerOrderList = new ArrayList<CustomerOrder>();
+	private List<Trip> trips = new ArrayList<>();
 
 	public Courier() {
 	}
 
-	public Courier(Long accountId, String fullName, float vehicleCapacity, Date lastUpdated, List<CustomerOrder> customerOrderList) {
+	public Courier(Long accountId, String fullName, float vehicleCapacity, Date lastUpdated, List<Trip> trips) {
 		this.accountId = accountId;
 		this.fullName = fullName;
 		this.vehicleCapacity = vehicleCapacity;
 		this.lastUpdated = lastUpdated;
-		this.customerOrderList = customerOrderList;
+		this.trips = trips;
 	}
 
 	public Long getAccountId() {
@@ -66,11 +66,11 @@ public class Courier {
 		this.lastUpdated = lastUpdated;
 	}
 
-	public List<CustomerOrder> getOrderItemList() {
-		return customerOrderList;
+	public List<Trip> getOrderItemList() {
+		return trips;
 	}
 
-	public void setOrderItemList(List<CustomerOrder> customerOrderList) {
-		this.customerOrderList = customerOrderList;
+	public void setOrderItemList(List<Trip> trips) {
+		this.trips = trips;
 	}
 }

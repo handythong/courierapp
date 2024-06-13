@@ -1,5 +1,7 @@
 package com.fdmgroup.courierapp.apimodel;
 
+import com.fdmgroup.courierapp.model.Address;
+
 public class RequestOrder {
     /*
     private String cardNumber;
@@ -7,21 +9,18 @@ public class RequestOrder {
     private String nameOnCard;
     private String securityCode;
     */
-    //Order Attributes
-    private String fromAddress;
-    private String toAddress;
 
     //Sender Attributes
     private String fromFullName;
     private String fromEmail;
     private String fromPhone;
-//    private String fromCompanyName;
+    private Address fromAddress;
 
     //RecipientAttributes
     private String toFullName;
     private String toEmail;
     private String toPhone;
-//    private String toCompanyName;
+    private Address toAddress;
 
     //Parcel attributes
     private String weight;
@@ -32,7 +31,7 @@ public class RequestOrder {
 
     public RequestOrder() { }
 
-    public RequestOrder(String fromAddress, String toAddress, String fromFullName, String fromEmail, String fromPhone, String toFullName, String toEmail, String toPhone, String weight, String width, String height, String length, String parcelDescription) {
+    public RequestOrder(Address fromAddress, Address toAddress, String fromFullName, String fromEmail, String fromPhone, String toFullName, String toEmail, String toPhone, String weight, String width, String height, String length, String parcelDescription) {
         this.fromAddress = fromAddress;
         this.toAddress = toAddress;
         this.fromFullName = fromFullName;
@@ -48,19 +47,19 @@ public class RequestOrder {
         this.parcelDescription = parcelDescription;
     }
 
-    public String getFromAddress() {
+    public Address getFromAddress() {
         return fromAddress;
     }
 
-    public void setFromAddress(String fromAddress) {
+    public void setFromAddress(Address fromAddress) {
         this.fromAddress = fromAddress;
     }
 
-    public String getToAddress() {
+    public Address getToAddress() {
         return toAddress;
     }
 
-    public void setToAddress(String toAddress) {
+    public void setToAddress(Address toAddress) {
         this.toAddress = toAddress;
     }
 

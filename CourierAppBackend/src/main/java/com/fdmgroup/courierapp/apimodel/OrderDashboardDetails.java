@@ -1,5 +1,7 @@
 package com.fdmgroup.courierapp.apimodel;
 
+import com.fdmgroup.courierapp.model.Address;
+
 import java.time.LocalDate;
 
 public class OrderDashboardDetails {
@@ -8,8 +10,9 @@ public class OrderDashboardDetails {
     private String fromFullName;
     private LocalDate orderDate;
     private LocalDate deliveryDate;
-    private String toAddress;
-    private String currentStatus;
+    private Address toAddress;
+    private Address fromAddress;
+	private String currentStatus;
 
     public OrderDashboardDetails() {
     }
@@ -62,12 +65,19 @@ public class OrderDashboardDetails {
 		this.toFullName = toFullName;
 	}
 
-	public String getToAddress() {
+	public Address getToAddress() {
 		return toAddress;
 	}
 
-	public void setToAddress(String toAddress) {
+	public void setToAddress(Address toAddress) {
 		this.toAddress = toAddress;
 	}
 
+    public Address getFromAddress() {
+		return fromAddress;
+	}
+
+	public void setFromAddress(Address fromAddress) {
+		this.fromAddress = fromAddress;
+	}
 }
