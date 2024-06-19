@@ -14,7 +14,7 @@ public class TripDetails {
     private Address partyAddress;
     private WarehouseDetails sortingWarehouse;
     private Optional<Long> courierId;
-    private String orderId;
+    private long orderId;
 
     public TripDetails() {
     }
@@ -75,11 +75,11 @@ public class TripDetails {
         this.courierId = courierId;
     }
 
-	public String getOrderId() {
+	public long getOrderId() {
 		return orderId;
 	}
 
-	public void setOrderId(String orderId) {
+	public void setOrderId(long orderId) {
 		this.orderId = orderId;
 	}
     
