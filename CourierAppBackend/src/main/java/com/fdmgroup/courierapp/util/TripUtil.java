@@ -29,6 +29,7 @@ public class TripUtil {
         tripDetails.setRoute(trip.getRoute().toString());
         tripDetails.setPartyAddress(this.getPartyAddress(trip));
         tripDetails.setSortingWarehouse(this.warehouseDetailsMapper(trip.getWarehouse()));
+        tripDetails.setOrderId(trip.getCustomerOrder().getId());
         return tripDetails;
     }
 
