@@ -7,6 +7,7 @@ import com.fdmgroup.courierapp.exception.WarehouseNotFoundException;
 import com.fdmgroup.courierapp.model.*;
 import com.fdmgroup.courierapp.service.*;
 import com.fdmgroup.courierapp.util.CustomerOrderUtil;
+import com.fdmgroup.courierapp.util.StatusUtil;
 import com.stripe.exception.StripeException;
 import com.stripe.model.PaymentIntent;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,6 +30,8 @@ public class CustomerOrderController {
     CustomerOrderUtil customerOrderUtil;
     @Autowired
     PaymentService paymentService;
+    @Autowired
+    StatusUtil statusUtil;
     
     @PostMapping("/orders/create-order")
     public ResponseEntity<ResponseOrder> createOrder(@RequestHeader("username") String username, @RequestBody RequestOrder requestOrder) {
@@ -40,7 +43,7 @@ public class CustomerOrderController {
             Party recipient = customerOrderUtil.generateOrderRecipient(requestOrder);
             Party sender = customerOrderUtil.generateOrderSender(requestOrder);
             Customer customer = customerService.findByUsername(username);
-            Status orderCreatedStatus = customerOrderUtil.generateAwaitPaymentStatus();
+            Status orderCreatedStatus = statusUtil.generateAwaitPaymentStatus();
 
             //OrderItem creation
             CustomerOrder newCustomerOrder = new CustomerOrder();
@@ -89,9 +92,7 @@ public class CustomerOrderController {
     public ResponseEntity<ResponseOrder> completePayment(@RequestBody RequestPayment requestPayment) {
         try {
             CustomerOrder customerOrder = customerOrderService.findByPaymentReference(requestPayment.getPaymentReference());
-            Status orderCreatedStatus = new Status(StatusEnum.ORDER_CREATED);
-            orderCreatedStatus.setRemarks("Order Created");
-            orderCreatedStatus.setStatusUpdateDate(new Date());
+            Status orderCreatedStatus = statusUtil.generateOrderCreatedStatus();
             orderCreatedStatus.setCustomerOrder(customerOrder);
             Trip pickupTrip = customerOrderUtil.generatePickupTrip();
             pickupTrip.setWarehouse(warehouseService.findById(1L));

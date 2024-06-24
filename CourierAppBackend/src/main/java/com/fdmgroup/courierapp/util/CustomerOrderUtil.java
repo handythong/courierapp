@@ -46,20 +46,11 @@ public class CustomerOrderUtil {
         return sender;
     }
 
-
     public Date generateDeliveryDate() {
         // 5 days from order date
         Calendar calendar = Calendar.getInstance();
         calendar.add(Calendar.DAY_OF_YEAR, 5);
         return calendar.getTime();
-    }
-
-    public Status generateAwaitPaymentStatus() {
-        Status status = new Status();
-        status.setStatus(StatusEnum.AWAITING_PAYMENT);
-        status.setRemarks("Awaiting Payment");
-        status.setStatusUpdateDate(new Date());
-        return status;
     }
 
     public Trip generatePickupTrip() {
