@@ -6,13 +6,13 @@ public class RequestOrder {
     //Sender Attributes
     private String fromFullName;
     private String fromEmail;
-    private String fromPhone;
+    private String fromPhoneNo;
     private Address fromAddress;
 
     //RecipientAttributes
     private String toFullName;
     private String toEmail;
-    private String toPhone;
+    private String toPhoneNo;
     private Address toAddress;
 
     //Parcel attributes
@@ -27,15 +27,15 @@ public class RequestOrder {
 
     public RequestOrder() { }
 
-    public RequestOrder(Address fromAddress, Address toAddress, String fromFullName, String fromEmail, String fromPhone, String toFullName, String toEmail, String toPhone, String weight, String width, String height, String length, String parcelDescription, long price) {
+    public RequestOrder(Address fromAddress, Address toAddress, String fromFullName, String fromEmail, String fromPhoneNo, String toFullName, String toEmail, String toPhone, String weight, String width, String height, String length, String parcelDescription, long price) {
         this.fromAddress = fromAddress;
         this.toAddress = toAddress;
         this.fromFullName = fromFullName;
         this.fromEmail = fromEmail;
-        this.fromPhone = fromPhone;
+        this.fromPhoneNo = fromPhoneNo;
         this.toFullName = toFullName;
         this.toEmail = toEmail;
-        this.toPhone = toPhone;
+        this.toPhoneNo = toPhoneNo;
         this.weight = weight;
         this.width = width;
         this.height = height;
@@ -76,12 +76,12 @@ public class RequestOrder {
         this.fromEmail = fromEmail;
     }
 
-    public String getFromPhone() {
-        return fromPhone;
+    public String getFromPhoneNo() {
+        return fromPhoneNo;
     }
 
-    public void setFromPhone(String fromPhone) {
-        this.fromPhone = fromPhone;
+    public void setFromPhoneNo(String fromPhoneNo) {
+        this.fromPhoneNo = fromPhoneNo;
     }
 
     public String getToFullName() {
@@ -100,12 +100,12 @@ public class RequestOrder {
         this.toEmail = toEmail;
     }
 
-    public String getToPhone() {
-        return toPhone;
+    public String getToPhoneNo() {
+        return toPhoneNo;
     }
 
-    public void setToPhone(String toPhone) {
-        this.toPhone = toPhone;
+    public void setToPhoneNo(String toPhoneNo) {
+        this.toPhoneNo = toPhoneNo;
     }
 
     public String getWeight() {

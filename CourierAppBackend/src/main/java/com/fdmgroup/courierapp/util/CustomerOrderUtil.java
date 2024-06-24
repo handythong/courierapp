@@ -29,7 +29,7 @@ public class CustomerOrderUtil {
     public Party generateOrderRecipient(RequestOrder requestOrder) {
         Party recipient = new Party();
         recipient.setEmail(requestOrder.getToEmail());
-        recipient.setPhoneNo(requestOrder.getToPhone());
+        recipient.setPhoneNo(requestOrder.getToPhoneNo());
         recipient.setFullName(requestOrder.getToFullName());
         recipient.setAddress(requestOrder.getToAddress());
         recipient.setPartyType(PartyEnum.RECIPIENT);
@@ -39,7 +39,7 @@ public class CustomerOrderUtil {
     public Party generateOrderSender(RequestOrder requestOrder) {
         Party sender = new Party();
         sender.setEmail(requestOrder.getFromEmail());
-        sender.setPhoneNo(requestOrder.getFromPhone());
+        sender.setPhoneNo(requestOrder.getFromPhoneNo());
         sender.setFullName(requestOrder.getFromFullName());
         sender.setAddress(requestOrder.getFromAddress());
         sender.setPartyType(PartyEnum.SENDER);
