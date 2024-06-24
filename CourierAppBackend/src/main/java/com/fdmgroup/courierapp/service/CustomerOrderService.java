@@ -29,6 +29,15 @@ public class CustomerOrderService {
 		}
 	}
 
+	public CustomerOrder findByPaymentReference(String paymentReference) throws OrderNotFoundException {
+		Optional<CustomerOrder> optCustomerOrder = customerOrderRepo.findByPaymentReference(paymentReference);
+		if (optCustomerOrder.isPresent()) {
+			return optCustomerOrder.get();
+		} else {
+			throw new OrderNotFoundException("Order not found in database");
+		}
+	}
+
 	public CustomerOrder saveOrder(CustomerOrder customerOrder) {
 		return customerOrderRepo.save(customerOrder);
 	}

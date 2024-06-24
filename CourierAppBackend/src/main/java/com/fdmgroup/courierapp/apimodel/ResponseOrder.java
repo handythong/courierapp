@@ -5,6 +5,7 @@ public class ResponseOrder {
     private String message;
 
     private OrderDetails orderDetails;
+    private String clientSecret;
 
     public ResponseOrder() {
     }
@@ -18,6 +19,13 @@ public class ResponseOrder {
         this.status = status;
         this.message = message;
         this.orderDetails = orderDetails;
+    }
+
+    public ResponseOrder(String status, String message, OrderDetails orderDetails, String clientSecret) {
+        this.status = status;
+        this.message = message;
+        this.orderDetails = orderDetails;
+        this.clientSecret = clientSecret;
     }
 
     public String getStatus() {
@@ -42,5 +50,13 @@ public class ResponseOrder {
 
     public void setOrderDetails(OrderDetails orderDetails) {
         this.orderDetails = orderDetails;
+    }
+
+    public String getClientSecret() {
+        return clientSecret;
+    }
+
+    public void setClientSecret(String clientSecret) {
+        this.clientSecret = clientSecret;
     }
 }

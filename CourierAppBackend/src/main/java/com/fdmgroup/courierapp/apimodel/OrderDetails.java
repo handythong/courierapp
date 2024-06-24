@@ -26,6 +26,8 @@ public class OrderDetails {
     private float height;
     private float length;
     private String parcelDescription;
+    //Payment field
+    private String paymentReference;
 
     public OrderDetails() {
     }
@@ -164,5 +166,13 @@ public class OrderDetails {
 
     public void setParcelDescription(String parcelDescription) {
         this.parcelDescription = parcelDescription;
+    }
+
+    public String getPaymentReference() {
+        return paymentReference;
+    }
+
+    public void setPaymentReference(String paymentReference) {
+        this.paymentReference = paymentReference;
     }
 }

@@ -16,6 +16,7 @@ public class CustomerOrder {
 	private Date deliveryDate;
 	private Date orderDate;
 	private Date lastUpdated;
+	private String paymentReference;
 
 	@OneToMany(mappedBy = "customerOrder", cascade = CascadeType.ALL)
 	private List<Status> statuses = new ArrayList<>();
@@ -33,7 +34,7 @@ public class CustomerOrder {
 	public CustomerOrder() {
 	}
 
-	public CustomerOrder(long id, Date deliveryDate, Date orderDate, Date lastUpdated, List<Status> statuses, List<Trip> trips, Parcel parcel, List<Party> parties, Customer customer) {
+	public CustomerOrder(long id, Date deliveryDate, Date orderDate, Date lastUpdated, List<Status> statuses, List<Trip> trips, Parcel parcel, List<Party> parties, Customer customer, String paymentReference) {
 		this.id = id;
 		this.deliveryDate = deliveryDate;
 		this.orderDate = orderDate;
@@ -43,6 +44,7 @@ public class CustomerOrder {
 		this.parcel = parcel;
 		this.parties = parties;
 		this.customer = customer;
+		this.paymentReference = paymentReference;
 	}
 
 	public long getId() {
@@ -115,6 +117,14 @@ public class CustomerOrder {
 
 	public void setCustomer(Customer customer) {
 		this.customer = customer;
+	}
+
+	public String getPaymentReference() {
+		return paymentReference;
+	}
+
+	public void setPaymentReference(String paymentReference) {
+		this.paymentReference = paymentReference;
 	}
 
 	public void appendStatus(Status status) {

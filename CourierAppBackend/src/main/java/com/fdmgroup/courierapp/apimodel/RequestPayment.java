@@ -1,29 +1,20 @@
 package com.fdmgroup.courierapp.apimodel;
 
 public class RequestPayment {
-    private long amount;
-//    private String currency;
+    private String paymentReference;
 
     public RequestPayment() {
     }
 
-    public RequestPayment(int amount) {
-        this.amount = amount;
+    public RequestPayment(String paymentReference) {
+        this.paymentReference = paymentReference;
     }
 
-    public long getAmount() {
-        return amount;
+    public String getPaymentReference() {
+        return paymentReference;
     }
 
-    public void setAmount(long amount) {
-        this.amount = amount;
+    public void setPaymentReference(String paymentReference) {
+        this.paymentReference = paymentReference;
     }
-
-//    public String getCurrency() {
-//        return currency;
-//    }
-//
-//    public void setCurrency(String currency) {
-//        this.currency = currency;
-//    }
 }

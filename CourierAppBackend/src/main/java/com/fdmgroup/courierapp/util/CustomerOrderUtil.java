@@ -16,7 +16,7 @@ import java.util.List;
 
 @Component
 public class CustomerOrderUtil {
-    public Parcel generateParcel(RequestOrder requestOrder) throws Exception {
+    public Parcel generateParcel(RequestOrder requestOrder) throws NumberFormatException {
         Parcel newParcel = new Parcel();
         newParcel.setDescription(requestOrder.getParcelDescription());
         newParcel.setHeight(Float.parseFloat(requestOrder.getHeight()));
@@ -54,10 +54,10 @@ public class CustomerOrderUtil {
         return calendar.getTime();
     }
 
-    public Status generateOrderCreatedStatus() {
+    public Status generateAwaitPaymentStatus() {
         Status status = new Status();
-        status.setStatus(StatusEnum.ORDER_CREATED);
-        status.setRemarks("Order Created");
+        status.setStatus(StatusEnum.AWAITING_PAYMENT);
+        status.setRemarks("Awaiting Payment");
         status.setStatusUpdateDate(new Date());
         return status;
     }
@@ -100,6 +100,7 @@ public class CustomerOrderUtil {
         newOrderDetails.setHeight(customerOrder.getParcel().getHeight());
         newOrderDetails.setLength(customerOrder.getParcel().getLength());
         newOrderDetails.setParcelDescription(customerOrder.getParcel().getDescription());
+        newOrderDetails.setPaymentReference(customerOrder.getPaymentReference());
         return newOrderDetails;
     }
 

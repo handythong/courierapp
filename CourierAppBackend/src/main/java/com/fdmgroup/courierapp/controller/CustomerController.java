@@ -39,8 +39,6 @@ public class CustomerController {
     PartyService partyService;
     @Autowired
     PartyUtil partyUtil;
-    @Autowired
-    PaymentService paymentService;
 
     private final Logger logger = LogManager.getLogger();
 
@@ -88,7 +86,6 @@ public class CustomerController {
             return new ResponseEntity<>(new ResponseOrder("Failed", "Fields cannot be empty"), HttpStatus.OK);
         }
 
-
         Party updatedSender = partyUtil.mapSender(requestOrderUpdate.getSender(), customerOrder);
         Party updatedRecipient = partyUtil.mapRecipient(requestOrderUpdate.getRecipient(), customerOrder);
         customerOrder.replaceParty(updatedSender, updatedRecipient);
@@ -98,14 +95,5 @@ public class CustomerController {
         return new ResponseEntity<>(responseOrder, HttpStatus.OK);
     }
 
-    @PostMapping("/create-payment-intent")
-    public ResponseEntity<ResponsePayment> createPaymentIntent(@RequestBody RequestPayment requestPayment) {
-        try {
-            PaymentIntent paymentIntent = paymentService.generateStripePaymentIntent(requestPayment);
-            String clientSecret = paymentIntent.getClientSecret();
-            return new ResponseEntity<>(new ResponsePayment("Success", "Payment Intent Creation Success", clientSecret), HttpStatus.OK);
-        } catch (StripeException e) {
-            return new ResponseEntity<>(new ResponsePayment("Failed", "Payment Intent Creation Failed"), HttpStatus.OK);
-        }
-    }
+
 }

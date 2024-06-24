@@ -17,7 +17,7 @@ public class PaymentService {
     @Value("${stripeSecretKey}")
     private String secretKey;
 
-    public PaymentIntent generateStripePaymentIntent(RequestPayment requestPayment) throws StripeException {
+    public PaymentIntent generateStripePaymentIntent(long amount) throws StripeException {
         Stripe.apiKey = secretKey;
         List<String> paymentMethodType = new ArrayList<>();
         paymentMethodType.add("card");
@@ -25,7 +25,7 @@ public class PaymentService {
         paymentMethodType.add("paynow");
         PaymentIntentCreateParams params =
                 PaymentIntentCreateParams.builder()
-                        .setAmount(requestPayment.getAmount())
+                        .setAmount(amount)
                         .setCurrency("sgd")
                         .addAllPaymentMethodType(paymentMethodType)
                         .build();
