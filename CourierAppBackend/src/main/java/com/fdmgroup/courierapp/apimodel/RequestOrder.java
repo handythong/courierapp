@@ -27,7 +27,7 @@ public class RequestOrder {
 
     public RequestOrder() { }
 
-    public RequestOrder(Address fromAddress, Address toAddress, String fromFullName, String fromEmail, String fromPhoneNo, String toFullName, String toEmail, String toPhone, String weight, String width, String height, String length, String parcelDescription, long price) {
+    public RequestOrder(Address fromAddress, Address toAddress, String fromFullName, String fromEmail, String fromPhoneNo, String toFullName, String toEmail, String toPhoneNo, String weight, String width, String height, String length, String parcelDescription, long price) {
         this.fromAddress = fromAddress;
         this.toAddress = toAddress;
         this.fromFullName = fromFullName;
