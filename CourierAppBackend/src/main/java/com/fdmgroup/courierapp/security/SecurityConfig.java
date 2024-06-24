@@ -14,28 +14,28 @@ public class SecurityConfig {
 
     private UserAuthenticationEntryPoint userAuthenticationEntryPoint;
 
-//    @Bean
-//    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-//        http.csrf(csrf -> csrf.disable())
-//                .authorizeHttpRequests(authz -> authz.requestMatchers("/**").permitAll().anyRequest().permitAll());
-//        return http.build();
-//    }
-
     @Bean
-    SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        http
-                .exceptionHandling(customizer -> customizer.authenticationEntryPoint(userAuthenticationEntryPoint))
-                .addFilterBefore(new JwtTokenValidator(), BasicAuthenticationFilter.class)
-                .csrf(csrf -> csrf.disable())
-                .sessionManagement(management -> management.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                .authorizeHttpRequests(
-                        authorize -> authorize.requestMatchers("/login", "/logout", "/register", "/registerCourier", "/track/**")
-                                .permitAll()
-                                .requestMatchers("/orders/create-order", "/customer/**").hasAnyRole("CUSTOMER", "ADMIN")
-                                .requestMatchers("/courier/**").hasAnyRole("COURIER", "ADMIN")
-                                .requestMatchers("/admin/**").hasAnyRole("ADMIN")
-                                .anyRequest().authenticated())
-                .logout(logout -> logout.logoutUrl("/default-logout"));
+    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+        http.csrf(csrf -> csrf.disable())
+                .authorizeHttpRequests(authz -> authz.requestMatchers("/**").permitAll().anyRequest().permitAll());
         return http.build();
     }
+
+//    @Bean
+//    SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+//        http
+//                .exceptionHandling(customizer -> customizer.authenticationEntryPoint(userAuthenticationEntryPoint))
+//                .addFilterBefore(new JwtTokenValidator(), BasicAuthenticationFilter.class)
+//                .csrf(csrf -> csrf.disable())
+//                .sessionManagement(management -> management.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+//                .authorizeHttpRequests(
+//                        authorize -> authorize.requestMatchers("/login", "/logout", "/register", "/registerCourier", "/track/**")
+//                                .permitAll()
+//                                .requestMatchers("/orders/create-order", "/customer/**").hasAnyRole("CUSTOMER", "ADMIN")
+//                                .requestMatchers("/courier/**").hasAnyRole("COURIER", "ADMIN")
+//                                .requestMatchers("/admin/**").hasAnyRole("ADMIN")
+//                                .anyRequest().authenticated())
+//                .logout(logout -> logout.logoutUrl("/default-logout"));
+//        return http.build();
+//    }
 }
