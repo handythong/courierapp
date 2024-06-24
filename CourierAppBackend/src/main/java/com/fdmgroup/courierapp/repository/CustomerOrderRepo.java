@@ -7,9 +7,12 @@ import org.springframework.stereotype.Repository;
 import com.fdmgroup.courierapp.model.CustomerOrder;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface CustomerOrderRepo extends JpaRepository<CustomerOrder,Long> {
+
+    Optional<CustomerOrder> findByPaymentReference(String paymentReference);
 
     @Query(value = "SELECT co.* FROM customer_order co"
             + " INNER JOIN customer c"

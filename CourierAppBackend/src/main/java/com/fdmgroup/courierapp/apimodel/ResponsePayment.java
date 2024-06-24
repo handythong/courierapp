@@ -1,30 +1,23 @@
 package com.fdmgroup.courierapp.apimodel;
 
-public class ResponseOrder {
+import com.stripe.model.PaymentIntent;
+
+public class ResponsePayment {
     private String status;
     private String message;
-
-    private OrderDetails orderDetails;
     private String clientSecret;
 
-    public ResponseOrder() {
+    public ResponsePayment() {
     }
 
-    public ResponseOrder(String status, String message) {
+    public ResponsePayment(String status, String message) {
         this.status = status;
         this.message = message;
     }
 
-    public ResponseOrder(String status, String message, OrderDetails orderDetails) {
+    public ResponsePayment(String status, String message, String clientSecret) {
         this.status = status;
         this.message = message;
-        this.orderDetails = orderDetails;
-    }
-
-    public ResponseOrder(String status, String message, OrderDetails orderDetails, String clientSecret) {
-        this.status = status;
-        this.message = message;
-        this.orderDetails = orderDetails;
         this.clientSecret = clientSecret;
     }
 
@@ -42,14 +35,6 @@ public class ResponseOrder {
 
     public void setMessage(String message) {
         this.message = message;
-    }
-
-    public OrderDetails getOrderDetails() {
-        return orderDetails;
-    }
-
-    public void setOrderDetails(OrderDetails orderDetails) {
-        this.orderDetails = orderDetails;
     }
 
     public String getClientSecret() {

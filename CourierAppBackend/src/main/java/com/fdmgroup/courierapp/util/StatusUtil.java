@@ -5,6 +5,8 @@ import com.fdmgroup.courierapp.model.StatusEnum;
 import com.fdmgroup.courierapp.model.TripStatusEnum;
 import org.springframework.stereotype.Component;
 
+import java.util.Date;
+
 @Component
 public class StatusUtil {
     public Status statusMapper(String status){
@@ -45,5 +47,21 @@ public class StatusUtil {
             default:
                 return null;
         }
+    }
+
+    public Status generateOrderCreatedStatus() {
+        Status status = new Status();
+        status.setStatus(StatusEnum.ORDER_CREATED);
+        status.setRemarks("Order Created");
+        status.setStatusUpdateDate(new Date());
+        return status;
+    }
+
+    public Status generateAwaitPaymentStatus() {
+        Status status = new Status();
+        status.setStatus(StatusEnum.AWAITING_PAYMENT);
+        status.setRemarks("Awaiting Payment");
+        status.setStatusUpdateDate(new Date());
+        return status;
     }
 }

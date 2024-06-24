@@ -16,7 +16,7 @@ import java.util.List;
 
 @Component
 public class CustomerOrderUtil {
-    public Parcel generateParcel(RequestOrder requestOrder) throws Exception {
+    public Parcel generateParcel(RequestOrder requestOrder) throws NumberFormatException {
         Parcel newParcel = new Parcel();
         newParcel.setDescription(requestOrder.getParcelDescription());
         newParcel.setHeight(Float.parseFloat(requestOrder.getHeight()));
@@ -46,20 +46,11 @@ public class CustomerOrderUtil {
         return sender;
     }
 
-
     public Date generateDeliveryDate() {
         // 5 days from order date
         Calendar calendar = Calendar.getInstance();
         calendar.add(Calendar.DAY_OF_YEAR, 5);
         return calendar.getTime();
-    }
-
-    public Status generateOrderCreatedStatus() {
-        Status status = new Status();
-        status.setStatus(StatusEnum.ORDER_CREATED);
-        status.setRemarks("Order Created");
-        status.setStatusUpdateDate(new Date());
-        return status;
     }
 
     public Trip generatePickupTrip() {
@@ -100,6 +91,7 @@ public class CustomerOrderUtil {
         newOrderDetails.setHeight(customerOrder.getParcel().getHeight());
         newOrderDetails.setLength(customerOrder.getParcel().getLength());
         newOrderDetails.setParcelDescription(customerOrder.getParcel().getDescription());
+        newOrderDetails.setPaymentReference(customerOrder.getPaymentReference());
         return newOrderDetails;
     }
 

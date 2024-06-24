@@ -7,8 +7,10 @@ import com.fdmgroup.courierapp.model.*;
 import com.fdmgroup.courierapp.service.CustomerOrderService;
 import com.fdmgroup.courierapp.service.CustomerService;
 import com.fdmgroup.courierapp.service.PartyService;
+import com.fdmgroup.courierapp.service.PaymentService;
 import com.fdmgroup.courierapp.util.CustomerOrderUtil;
 import com.fdmgroup.courierapp.util.PartyUtil;
+import com.stripe.exception.StripeException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +20,10 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.stream.Collectors;
+
+import com.stripe.Stripe;
+import com.stripe.model.PaymentIntent;
+import com.stripe.param.PaymentIntentCreateParams;
 
 @RequestMapping("/customer")
 @RestController
@@ -80,7 +86,6 @@ public class CustomerController {
             return new ResponseEntity<>(new ResponseOrder("Failed", "Fields cannot be empty"), HttpStatus.OK);
         }
 
-
         Party updatedSender = partyUtil.mapSender(requestOrderUpdate.getSender(), customerOrder);
         Party updatedRecipient = partyUtil.mapRecipient(requestOrderUpdate.getRecipient(), customerOrder);
         customerOrder.replaceParty(updatedSender, updatedRecipient);
@@ -89,4 +94,6 @@ public class CustomerController {
         ResponseOrder responseOrder = new ResponseOrder("Success", "Updated order success", customerOrderUtil.generateOrderDetails(customerOrder));
         return new ResponseEntity<>(responseOrder, HttpStatus.OK);
     }
+
+
 }

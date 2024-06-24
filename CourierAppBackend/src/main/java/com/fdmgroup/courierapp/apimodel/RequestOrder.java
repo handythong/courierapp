@@ -3,13 +3,6 @@ package com.fdmgroup.courierapp.apimodel;
 import com.fdmgroup.courierapp.model.Address;
 
 public class RequestOrder {
-    /*
-    private String cardNumber;
-    private String expiryDate;
-    private String nameOnCard;
-    private String securityCode;
-    */
-
     //Sender Attributes
     private String fromFullName;
     private String fromEmail;
@@ -29,9 +22,12 @@ public class RequestOrder {
     private String length;
     private String parcelDescription;
 
+    //Payment attributes
+    private long price;
+
     public RequestOrder() { }
 
-    public RequestOrder(Address fromAddress, Address toAddress, String fromFullName, String fromEmail, String fromPhoneNo, String toFullName, String toEmail, String toPhoneNo, String weight, String width, String height, String length, String parcelDescription) {
+    public RequestOrder(Address fromAddress, Address toAddress, String fromFullName, String fromEmail, String fromPhoneNo, String toFullName, String toEmail, String toPhoneNo, String weight, String width, String height, String length, String parcelDescription, long price) {
         this.fromAddress = fromAddress;
         this.toAddress = toAddress;
         this.fromFullName = fromFullName;
@@ -45,6 +41,7 @@ public class RequestOrder {
         this.height = height;
         this.length = length;
         this.parcelDescription = parcelDescription;
+        this.price = price;
     }
 
     public Address getFromAddress() {
@@ -149,5 +146,13 @@ public class RequestOrder {
 
     public void setParcelDescription(String parcelDescription) {
         this.parcelDescription = parcelDescription;
+    }
+
+    public long getPrice() {
+        return price;
+    }
+
+    public void setPrice(long price) {
+        this.price = price;
     }
 }
