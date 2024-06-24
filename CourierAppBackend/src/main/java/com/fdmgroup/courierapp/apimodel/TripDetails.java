@@ -14,6 +14,7 @@ public class TripDetails {
     private Address partyAddress;
     private WarehouseDetails sortingWarehouse;
     private Optional<Long> courierId;
+    private long orderId;
 
     public TripDetails() {
     }
@@ -73,4 +74,14 @@ public class TripDetails {
     public void setCourierId(Optional<Long> courierId) {
         this.courierId = courierId;
     }
+
+	public long getOrderId() {
+		return orderId;
+	}
+
+	public void setOrderId(long orderId) {
+		this.orderId = orderId;
+	}
+    
+    
 }
