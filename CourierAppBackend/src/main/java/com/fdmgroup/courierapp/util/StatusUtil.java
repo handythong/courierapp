@@ -52,7 +52,7 @@ public class StatusUtil {
     public Status generateOrderCreatedStatus() {
         Status status = new Status();
         status.setStatus(StatusEnum.ORDER_CREATED);
-        status.setRemarks("Order Created");
+        status.setRemarks("Payment Successful");
         status.setStatusUpdateDate(new Date());
         return status;
     }
