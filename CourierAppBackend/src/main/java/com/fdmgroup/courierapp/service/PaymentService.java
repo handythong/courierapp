@@ -21,7 +21,6 @@ public class PaymentService {
         Stripe.apiKey = secretKey;
         List<String> paymentMethodType = new ArrayList<>();
         paymentMethodType.add("card");
-        paymentMethodType.add("grabpay");
         paymentMethodType.add("paynow");
         PaymentIntentCreateParams params =
                 PaymentIntentCreateParams.builder()
