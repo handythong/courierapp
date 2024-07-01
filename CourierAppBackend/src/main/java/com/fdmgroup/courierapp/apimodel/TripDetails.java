@@ -1,14 +1,13 @@
 package com.fdmgroup.courierapp.apimodel;
 
 import com.fdmgroup.courierapp.model.Address;
-import com.fdmgroup.courierapp.model.Warehouse;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 import java.util.Optional;
 
 public class TripDetails {
     private long tripId;
-    private Date tripDate;
+    private LocalDateTime tripDate;
     private String tripStatus;
     private String route;
     private Address partyAddress;
@@ -27,11 +26,11 @@ public class TripDetails {
         this.tripId = tripId;
     }
 
-    public Date getTripDate() {
+    public LocalDateTime getTripDate() {
         return tripDate;
     }
 
-    public void setTripDate(Date tripDate) {
+    public void setTripDate(LocalDateTime tripDate) {
         this.tripDate = tripDate;
     }
 

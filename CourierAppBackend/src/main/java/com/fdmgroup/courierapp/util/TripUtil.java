@@ -5,6 +5,7 @@ import com.fdmgroup.courierapp.apimodel.WarehouseDetails;
 import com.fdmgroup.courierapp.model.*;
 import org.springframework.stereotype.Component;
 
+import java.time.LocalDateTime;
 import java.util.Calendar;
 import java.util.Optional;
 
@@ -12,11 +13,10 @@ import java.util.Optional;
 public class TripUtil {
     public Trip generateDeliveryTrip() {
         Trip trip = new Trip();
-        Calendar calendar = Calendar.getInstance();
-        calendar.add(Calendar.DAY_OF_YEAR, 1);
+        LocalDateTime date = LocalDateTime.now().plusDays(1);
 
         trip.setRoute(RouteEnum.OUTBOUND);
-        trip.setTripDate(calendar.getTime());
+        trip.setTripDate(date);
         trip.setTripStatus(TripStatusEnum.UNASSIGNED);
         return trip;
     }

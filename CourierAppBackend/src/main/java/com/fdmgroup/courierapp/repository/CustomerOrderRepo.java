@@ -31,4 +31,5 @@ public interface CustomerOrderRepo extends JpaRepository<CustomerOrder,Long> {
             + " ORDER BY co.order_date DESC",
             nativeQuery = true)
     List<CustomerOrder> findAllWithCourierIdDesc(long courierId);
+
 }

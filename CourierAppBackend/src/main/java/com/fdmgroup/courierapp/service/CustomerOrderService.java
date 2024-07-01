@@ -49,4 +49,8 @@ public class CustomerOrderService {
 	public List<CustomerOrder> getOrderHistoryByCourierId(Long courierId) {
 		return customerOrderRepo.findAllWithCourierIdDesc(courierId);
 	}
+
+	public List<CustomerOrder> getAllOrder() {
+		return customerOrderRepo.findAll();
+	}
 }

@@ -10,7 +10,6 @@ import com.fdmgroup.courierapp.model.Courier;
 import com.fdmgroup.courierapp.service.CourierService;
 import com.fdmgroup.courierapp.service.StatusService;
 import com.fdmgroup.courierapp.service.TripService;
-import com.fdmgroup.courierapp.util.CustomerOrderUtil;
 import com.fdmgroup.courierapp.util.StatusUtil;
 import com.fdmgroup.courierapp.util.TripUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +17,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -28,8 +28,6 @@ import java.util.stream.Collectors;
 public class CourierController {
     @Autowired
     CourierService courierService;
-    @Autowired
-    CustomerOrderUtil customerOrderUtil;
     @Autowired
     StatusService statusService;
     @Autowired
@@ -118,7 +116,7 @@ public class CourierController {
         trip.setTripStatus(tripStatusEnum);
         status.setCustomerOrder(trip.getCustomerOrder());
         status.setRemarks(tripStatus.getRemarks());
-        status.setStatusUpdateDate(new Date());
+        status.setStatusUpdateDate(LocalDateTime.now());
         statusService.createStatus(status);
         tripService.saveTrip(trip);
 

@@ -1,16 +1,16 @@
 package com.fdmgroup.courierapp.apimodel;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 
 public class OrderStatus {
     private String status;
     private String remarks;
-    private Date statusUpdateDate;
+    private LocalDateTime statusUpdateDate;
 
     public OrderStatus() {
     }
 
-    public OrderStatus(String status, String remarks, Date statusUpdateDate) {
+    public OrderStatus(String status, String remarks, LocalDateTime statusUpdateDate) {
         this.status = status;
         this.remarks = remarks;
         this.statusUpdateDate = statusUpdateDate;
@@ -32,11 +32,11 @@ public class OrderStatus {
         this.remarks = remarks;
     }
 
-    public Date getStatusUpdateDate() {
+    public LocalDateTime getStatusUpdateDate() {
         return statusUpdateDate;
     }
 
-    public void setStatusUpdateDate(Date statusUpdateDate) {
+    public void setStatusUpdateDate(LocalDateTime statusUpdateDate) {
         this.statusUpdateDate = statusUpdateDate;
     }
 }

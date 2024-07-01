@@ -1,5 +1,6 @@
 package com.fdmgroup.courierapp.model;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -13,12 +14,12 @@ public class CustomerOrder {
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "CustomerOrderId_IdSeq")
 	@SequenceGenerator(name = "CustomerOrderId_IdSeq", sequenceName = "CustomerOrderId_IdSeq", allocationSize = 1, initialValue = 1)
 	private long id;
-	private Date deliveryDate;
-	private Date orderDate;
-	private Date lastUpdated;
+	private LocalDateTime deliveryDate;
+	private LocalDateTime orderDate;
+	private LocalDateTime lastUpdated;
 	private String paymentReference;
 
-	@OneToMany(mappedBy = "customerOrder", cascade = CascadeType.ALL)
+	@OneToMany(fetch = FetchType.EAGER, mappedBy = "customerOrder", cascade = CascadeType.ALL)
 	private List<Status> statuses = new ArrayList<>();
 	@OneToMany(mappedBy = "customerOrder", cascade = CascadeType.ALL)
 	private List<Trip> trips = new ArrayList<>();
@@ -34,7 +35,7 @@ public class CustomerOrder {
 	public CustomerOrder() {
 	}
 
-	public CustomerOrder(long id, Date deliveryDate, Date orderDate, Date lastUpdated, List<Status> statuses, List<Trip> trips, Parcel parcel, List<Party> parties, Customer customer, String paymentReference) {
+	public CustomerOrder(long id, LocalDateTime deliveryDate, LocalDateTime orderDate, LocalDateTime lastUpdated, List<Status> statuses, List<Trip> trips, Parcel parcel, List<Party> parties, Customer customer, String paymentReference) {
 		this.id = id;
 		this.deliveryDate = deliveryDate;
 		this.orderDate = orderDate;
@@ -55,27 +56,27 @@ public class CustomerOrder {
 		this.id = id;
 	}
 
-	public Date getDeliveryDate() {
+	public LocalDateTime getDeliveryDate() {
 		return deliveryDate;
 	}
 
-	public void setDeliveryDate(Date deliveryDate) {
+	public void setDeliveryDate(LocalDateTime deliveryDate) {
 		this.deliveryDate = deliveryDate;
 	}
 
-	public Date getOrderDate() {
+	public LocalDateTime getOrderDate() {
 		return orderDate;
 	}
 
-	public void setOrderDate(Date orderDate) {
+	public void setOrderDate(LocalDateTime orderDate) {
 		this.orderDate = orderDate;
 	}
 
-	public Date getLastUpdated() {
+	public LocalDateTime getLastUpdated() {
 		return lastUpdated;
 	}
 
-	public void setLastUpdated(Date lastUpdated) {
+	public void setLastUpdated(LocalDateTime lastUpdated) {
 		this.lastUpdated = lastUpdated;
 	}
 
