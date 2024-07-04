@@ -5,6 +5,7 @@ import com.fdmgroup.courierapp.model.StatusEnum;
 import com.fdmgroup.courierapp.model.TripStatusEnum;
 import org.springframework.stereotype.Component;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 
 @Component
@@ -53,7 +54,7 @@ public class StatusUtil {
         Status status = new Status();
         status.setStatus(StatusEnum.ORDER_CREATED);
         status.setRemarks("Payment Successful");
-        status.setStatusUpdateDate(new Date());
+        status.setStatusUpdateDate(LocalDateTime.now());
         return status;
     }
 
@@ -61,7 +62,7 @@ public class StatusUtil {
         Status status = new Status();
         status.setStatus(StatusEnum.AWAITING_PAYMENT);
         status.setRemarks("Awaiting Payment");
-        status.setStatusUpdateDate(new Date());
+        status.setStatusUpdateDate(LocalDateTime.now());
         return status;
     }
 }

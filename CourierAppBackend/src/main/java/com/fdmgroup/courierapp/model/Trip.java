@@ -2,6 +2,7 @@ package com.fdmgroup.courierapp.model;
 
 import jakarta.persistence.*;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 
 @Entity
@@ -12,7 +13,7 @@ public class Trip {
     @SequenceGenerator(name = "tripId_IdSeq", sequenceName = "tripId_IdSeq", allocationSize = 1, initialValue = 1)
     private long id;
 
-    private Date tripDate;
+    private LocalDateTime tripDate;
     @Enumerated(EnumType.STRING)
     private RouteEnum route;
     @Enumerated(EnumType.STRING)
@@ -31,7 +32,7 @@ public class Trip {
     public Trip() {
     }
 
-    public Trip(long id, Date tripDate, RouteEnum route, TripStatusEnum tripStatus, CustomerOrder customerOrder, Courier courier, Warehouse warehouse) {
+    public Trip(long id, LocalDateTime tripDate, RouteEnum route, TripStatusEnum tripStatus, CustomerOrder customerOrder, Courier courier, Warehouse warehouse) {
         this.id = id;
         this.tripDate = tripDate;
         this.route = route;
@@ -49,11 +50,11 @@ public class Trip {
         this.id = id;
     }
 
-    public Date getTripDate() {
+    public LocalDateTime getTripDate() {
         return tripDate;
     }
 
-    public void setTripDate(Date tripDate) {
+    public void setTripDate(LocalDateTime tripDate) {
         this.tripDate = tripDate;
     }
 

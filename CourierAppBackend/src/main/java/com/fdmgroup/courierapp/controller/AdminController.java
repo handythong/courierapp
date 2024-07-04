@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.*;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
 import java.util.*;
 
 @RequestMapping("/admin")
@@ -121,13 +122,13 @@ public class AdminController {
             status = new Status(
                     StatusEnum.PROCESSING,
                     "Trip is assigned to courier - Ready for pick up.",
-                    new Date(),
+                    LocalDateTime.now(),
                     trip.getCustomerOrder());
         } else if (route == RouteEnum.OUTBOUND) {
             status = new Status(
                     StatusEnum.READY_FOR_DELIVERY,
                     "Trip is assigned to courier - Ready for delivery.",
-                    new Date(),
+                    LocalDateTime.now(),
                     trip.getCustomerOrder()
             );
         } else {
@@ -181,14 +182,14 @@ public class AdminController {
             status = new Status(
                     StatusEnum.ORDER_CREATED,
                     "Courier is unassigned",
-                    new Date(),
+                    LocalDateTime.now(),
                     trip.getCustomerOrder()
             );
         } else if (route == RouteEnum.OUTBOUND) {
             status = new Status(
                     StatusEnum.SORTING,
                     "Courier is unassigned",
-                    new Date(),
+                    LocalDateTime.now(),
                     trip.getCustomerOrder()
             );
         } else {

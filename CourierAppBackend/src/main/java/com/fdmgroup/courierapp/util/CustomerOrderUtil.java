@@ -7,7 +7,9 @@ import com.fdmgroup.courierapp.apimodel.RequestOrder;
 import com.fdmgroup.courierapp.model.*;
 import org.springframework.stereotype.Component;
 
+import java.time.LocalDateTime;
 import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Comparator;
@@ -46,20 +48,18 @@ public class CustomerOrderUtil {
         return sender;
     }
 
-    public Date generateDeliveryDate() {
+    public LocalDateTime generateDeliveryDate() {
         // 5 days from order date
-        Calendar calendar = Calendar.getInstance();
-        calendar.add(Calendar.DAY_OF_YEAR, 5);
-        return calendar.getTime();
+        LocalDateTime date = LocalDateTime.now().plusDays(5);
+        return date;
     }
 
     public Trip generatePickupTrip() {
         Trip trip = new Trip();
-        Calendar calendar = Calendar.getInstance();
-        calendar.add(Calendar.DAY_OF_YEAR, 2);
+        LocalDateTime date = LocalDateTime.now().plusDays(2);
 
         trip.setRoute(RouteEnum.INBOUND);
-        trip.setTripDate(calendar.getTime());
+        trip.setTripDate(date);
         trip.setTripStatus(TripStatusEnum.UNASSIGNED);
         return trip;
     }
@@ -129,12 +129,10 @@ public class CustomerOrderUtil {
 		odb.setCurrentStatus(currentStatus.toString());
 		
 		odb.setOrderDate(customerOrder.getOrderDate()
-						.toInstant()
 						.atZone(ZoneId.systemDefault())
 						.toLocalDate());
 		
 		odb.setDeliveryDate(customerOrder.getDeliveryDate()
-				.toInstant()
 				.atZone(ZoneId.systemDefault())
 				.toLocalDate());
 		

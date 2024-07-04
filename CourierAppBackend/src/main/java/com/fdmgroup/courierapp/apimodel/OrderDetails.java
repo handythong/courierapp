@@ -2,14 +2,14 @@ package com.fdmgroup.courierapp.apimodel;
 
 import com.fdmgroup.courierapp.model.Address;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 import java.util.List;
 
 public class OrderDetails {
     private long orderId;
     private List<OrderStatus> orderStatus;
-    private Date deliveryDate;
-    private Date orderDate;
+    private LocalDateTime deliveryDate;
+    private LocalDateTime orderDate;
     //OrderRecipient field
     private Address fromAddress;
     private String fromFullName;
@@ -48,19 +48,19 @@ public class OrderDetails {
         this.orderStatus = orderStatus;
     }
 
-    public Date getDeliveryDate() {
+    public LocalDateTime getDeliveryDate() {
         return deliveryDate;
     }
 
-    public void setDeliveryDate(Date deliveryDate) {
+    public void setDeliveryDate(LocalDateTime deliveryDate) {
         this.deliveryDate = deliveryDate;
     }
 
-    public Date getOrderDate() {
+    public LocalDateTime getOrderDate() {
         return orderDate;
     }
 
-    public void setOrderDate(Date orderDate) {
+    public void setOrderDate(LocalDateTime orderDate) {
         this.orderDate = orderDate;
     }
 

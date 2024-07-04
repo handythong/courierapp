@@ -15,6 +15,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 
 @RestController
@@ -47,8 +48,8 @@ public class CustomerOrderController {
 
             //OrderItem creation
             CustomerOrder newCustomerOrder = new CustomerOrder();
-            newCustomerOrder.setOrderDate(new Date());
-            newCustomerOrder.setLastUpdated(new Date());
+            newCustomerOrder.setOrderDate(LocalDateTime.now());
+            newCustomerOrder.setLastUpdated(LocalDateTime.now());
             newCustomerOrder.setDeliveryDate(customerOrderUtil.generateDeliveryDate());
             newCustomerOrder.setParcel(newParcel);
             newCustomerOrder.setCustomer(customer);
@@ -100,6 +101,7 @@ public class CustomerOrderController {
             customerOrder.getTrips().add(pickupTrip);
             customerOrder.appendStatus(orderCreatedStatus);
             customerOrderService.saveOrder(customerOrder);
+            paymentService.completePayment(requestPayment.getPaymentReference());
             OrderDetails orderDetails = customerOrderUtil.generateOrderDetails(customerOrder);
             return new ResponseEntity<>(new ResponseOrder("Success", "Payment completed and order created successfully", orderDetails), HttpStatus.OK);
         } catch (WarehouseNotFoundException | OrderNotFoundException e) {
